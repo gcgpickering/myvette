@@ -1,0 +1,11 @@
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.db
+.env
+*.glb
+dist/
+.DS_Store
+.claude/launch.json

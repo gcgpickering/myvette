@@ -1,0 +1,1 @@
+export { PartInspector } from './PartInspector'

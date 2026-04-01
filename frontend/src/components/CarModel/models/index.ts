@@ -1,0 +1,5 @@
+export { GLTFCarModel } from './GLTFCarModel'
+export type { GLTFBoundingBox } from './GLTFCarModel'
+export { getCuratedModelPath } from './ModelRegistry'
+export { identifyMaterials } from './identifyMaterials'
+export type { MaterialMapping } from './identifyMaterials'

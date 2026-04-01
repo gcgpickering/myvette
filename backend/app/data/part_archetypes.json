@@ -1,0 +1,307 @@
+{
+  "archetypes": {
+    "engine": [
+      {
+        "key": "engine_i4_na",
+        "label": "Inline 4 (NA)",
+        "match": {"engineType": ["gasoline", "flex fuel"], "displacement_max": 2.5, "config": "inline", "cylinders": 4, "forced_induction": false},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "inline 4 cylinder naturally aspirated car engine block, detailed mechanical parts, metal and aluminum, studio lighting, white background",
+        "referenceQuery": "inline 4 cylinder engine block cutaway automotive"
+      },
+      {
+        "key": "engine_i4_turbo",
+        "label": "Inline 4 Turbo",
+        "match": {"engineType": ["gasoline", "flex fuel"], "displacement_max": 2.5, "config": "inline", "cylinders": 4, "forced_induction": true},
+        "scale": [1.05, 1.05, 1.05],
+        "meshyPrompt": "inline 4 cylinder turbocharged car engine block with turbo housing and intercooler piping, detailed mechanical, metal, studio lighting, white background",
+        "referenceQuery": "inline 4 turbo engine block with turbocharger automotive"
+      },
+      {
+        "key": "engine_i6",
+        "label": "Inline 6",
+        "match": {"engineType": ["gasoline", "diesel"], "config": "inline", "cylinders": 6},
+        "scale": [1.15, 1.0, 1.0],
+        "meshyPrompt": "inline 6 cylinder car engine block, long engine, detailed mechanical parts, metal and aluminum, studio lighting, white background",
+        "referenceQuery": "inline 6 cylinder engine block BMW automotive"
+      },
+      {
+        "key": "engine_v6",
+        "label": "V6",
+        "match": {"engineType": ["gasoline", "flex fuel", "diesel"], "config": "v", "cylinders": 6},
+        "scale": [1.1, 1.1, 1.1],
+        "meshyPrompt": "V6 car engine block, detailed mechanical parts visible, metal and aluminum, studio lighting, white background",
+        "referenceQuery": "V6 engine block cutaway automotive detailed"
+      },
+      {
+        "key": "engine_v8",
+        "label": "V8",
+        "match": {"engineType": ["gasoline", "flex fuel"], "config": "v", "cylinders": 8, "forced_induction": false},
+        "scale": [1.2, 1.2, 1.2],
+        "meshyPrompt": "V8 car engine block, large displacement, detailed mechanical parts, chrome valve covers, metal and aluminum, studio lighting, white background",
+        "referenceQuery": "V8 engine block chrome valve covers automotive"
+      },
+      {
+        "key": "engine_v8_supercharged",
+        "label": "V8 Supercharged",
+        "match": {"engineType": ["gasoline"], "config": "v", "cylinders": 8, "forced_induction": true},
+        "scale": [1.25, 1.3, 1.2],
+        "meshyPrompt": "V8 supercharged car engine with blower on top, detailed mechanical parts, chrome, metal and aluminum, studio lighting, white background",
+        "referenceQuery": "V8 supercharged engine block with blower automotive"
+      },
+      {
+        "key": "engine_flat4",
+        "label": "Flat 4 (Boxer)",
+        "match": {"engineType": ["gasoline"], "config": "flat", "cylinders": 4},
+        "scale": [1.0, 0.8, 1.2],
+        "meshyPrompt": "flat 4 boxer engine Subaru style, horizontally opposed cylinders, detailed mechanical, metal, studio lighting, white background",
+        "referenceQuery": "Subaru boxer flat 4 engine block cutaway"
+      },
+      {
+        "key": "engine_flat6",
+        "label": "Flat 6 (Boxer)",
+        "match": {"engineType": ["gasoline"], "config": "flat", "cylinders": 6},
+        "scale": [1.1, 0.8, 1.3],
+        "meshyPrompt": "flat 6 boxer engine Porsche style, horizontally opposed 6 cylinders, detailed mechanical, metal and aluminum, studio lighting, white background",
+        "referenceQuery": "Porsche flat 6 boxer engine block"
+      },
+      {
+        "key": "engine_v10",
+        "label": "V10",
+        "match": {"engineType": ["gasoline"], "config": "v", "cylinders": 10},
+        "scale": [1.3, 1.2, 1.2],
+        "meshyPrompt": "V10 car engine block, large high performance, detailed mechanical parts, metal and aluminum, studio lighting, white background",
+        "referenceQuery": "V10 engine block Lamborghini automotive"
+      },
+      {
+        "key": "engine_v12",
+        "label": "V12",
+        "match": {"engineType": ["gasoline"], "config": "v", "cylinders": 12},
+        "scale": [1.4, 1.2, 1.2],
+        "meshyPrompt": "V12 car engine block, large luxury performance engine, detailed mechanical parts, metal and aluminum, studio lighting, white background",
+        "referenceQuery": "V12 engine block Ferrari automotive"
+      },
+      {
+        "key": "engine_electric_motor",
+        "label": "Electric Motor",
+        "match": {"engineType": ["electric", "battery electric"]},
+        "scale": [0.8, 0.8, 0.8],
+        "meshyPrompt": "electric car motor, compact cylindrical motor unit, copper coils visible, metal housing, studio lighting, white background",
+        "referenceQuery": "electric vehicle motor unit Tesla cutaway"
+      },
+      {
+        "key": "engine_hybrid",
+        "label": "Hybrid (Engine + Motor)",
+        "match": {"engineType": ["hybrid", "plug-in hybrid"]},
+        "scale": [1.1, 1.1, 1.1],
+        "meshyPrompt": "hybrid car powertrain, gasoline engine block connected to electric motor, detailed mechanical, metal, studio lighting, white background",
+        "referenceQuery": "hybrid powertrain engine electric motor combo automotive"
+      }
+    ],
+    "transmission": [
+      {
+        "key": "trans_manual",
+        "label": "Manual Gearbox",
+        "match": {"transmissionType": ["manual"]},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "manual transmission gearbox housing, 6-speed, detailed mechanical, metal casting, studio lighting, white background",
+        "referenceQuery": "manual transmission gearbox housing 6 speed automotive"
+      },
+      {
+        "key": "trans_automatic",
+        "label": "Automatic Transmission",
+        "match": {"transmissionType": ["automatic", "auto"]},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "automatic transmission with torque converter, detailed mechanical housing, metal, studio lighting, white background",
+        "referenceQuery": "automatic transmission torque converter housing automotive"
+      },
+      {
+        "key": "trans_cvt",
+        "label": "CVT",
+        "match": {"transmissionType": ["cvt", "continuously variable"]},
+        "scale": [0.95, 0.95, 0.95],
+        "meshyPrompt": "CVT continuously variable transmission housing, compact, metal, studio lighting, white background",
+        "referenceQuery": "CVT transmission housing automotive"
+      },
+      {
+        "key": "trans_dct",
+        "label": "Dual-Clutch (DCT)",
+        "match": {"transmissionType": ["dual-clutch", "dct", "automated manual", "dsg"]},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "dual clutch transmission DCT housing, detailed mechanical, metal, studio lighting, white background",
+        "referenceQuery": "dual clutch transmission DCT housing automotive"
+      },
+      {
+        "key": "trans_electric",
+        "label": "Electric Single-Speed",
+        "match": {"transmissionType": ["electric", "single-speed", "direct drive"]},
+        "scale": [0.7, 0.7, 0.7],
+        "meshyPrompt": "electric vehicle single speed reduction gearbox, compact, metal housing, studio lighting, white background",
+        "referenceQuery": "electric vehicle single speed gearbox reducer"
+      }
+    ],
+    "brakes": [
+      {
+        "key": "brake_standard",
+        "label": "Standard Disc Brake",
+        "match": {"default": true},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "car disc brake assembly with single piston caliper and rotor, detailed mechanical, metal, studio lighting, white background",
+        "referenceQuery": "disc brake caliper rotor assembly automotive"
+      },
+      {
+        "key": "brake_performance",
+        "label": "Performance Disc Brake",
+        "match": {"trim_pattern": "sport|gt|rs|amg|m sport|type r|nismo|trd|sti|srt|hellcat|shelby|zl1|ss|track|competition"},
+        "scale": [1.1, 1.1, 1.1],
+        "meshyPrompt": "high performance multi-piston brake caliper with drilled slotted rotor, red caliper, detailed mechanical, studio lighting, white background",
+        "referenceQuery": "Brembo performance brake caliper drilled rotor automotive"
+      }
+    ],
+    "exhaust": [
+      {
+        "key": "exhaust_single",
+        "label": "Single Exit",
+        "match": {"default": true},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "car exhaust system with catalytic converter muffler and single exit tip, metal pipes, studio lighting, white background",
+        "referenceQuery": "car exhaust system muffler single tip automotive"
+      },
+      {
+        "key": "exhaust_dual",
+        "label": "Dual Exit",
+        "match": {"trim_pattern": "sport|gt|premium|limited|touring"},
+        "scale": [1.0, 1.0, 1.1],
+        "meshyPrompt": "car dual exhaust system with two mufflers and dual exit tips, metal pipes, studio lighting, white background",
+        "referenceQuery": "dual exhaust system two tips automotive"
+      },
+      {
+        "key": "exhaust_quad",
+        "label": "Quad Tips",
+        "match": {"trim_pattern": "rs|amg|m|srt|hellcat|shelby|zl1|type r|nismo"},
+        "scale": [1.1, 1.0, 1.2],
+        "meshyPrompt": "high performance quad tip exhaust system, four polished tips, metal pipes, studio lighting, white background",
+        "referenceQuery": "quad exhaust tips performance car automotive"
+      }
+    ],
+    "suspension": [
+      {
+        "key": "suspension_strut",
+        "label": "MacPherson Strut",
+        "match": {"default": true},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "MacPherson strut suspension assembly with spring coil and shock absorber, metal, studio lighting, white background",
+        "referenceQuery": "MacPherson strut suspension assembly coil spring automotive"
+      },
+      {
+        "key": "suspension_coilover",
+        "label": "Performance Coilover",
+        "match": {"trim_pattern": "sport|gt|rs|amg|m|type r|nismo|trd|sti|srt|track"},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "adjustable performance coilover suspension, spring with shock absorber, metal and aluminum, studio lighting, white background",
+        "referenceQuery": "coilover suspension adjustable performance automotive"
+      }
+    ],
+    "cooling-system": [
+      {
+        "key": "cooling_radiator",
+        "label": "Radiator",
+        "match": {"default": true},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "car radiator with cooling fan, aluminum fins and plastic tanks, detailed, studio lighting, white background",
+        "referenceQuery": "car radiator cooling fan assembly automotive"
+      }
+    ],
+    "air-intake": [
+      {
+        "key": "intake_standard",
+        "label": "Standard Airbox",
+        "match": {"default": true},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "car engine air intake airbox with air filter housing, plastic and rubber, studio lighting, white background",
+        "referenceQuery": "car engine air intake airbox filter housing"
+      },
+      {
+        "key": "intake_cold_air",
+        "label": "Cold Air Intake",
+        "match": {"trim_pattern": "sport|gt|rs|amg|m|type r|nismo|sti|srt"},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "cold air intake kit with cone filter and metal piping, chrome and red filter, studio lighting, white background",
+        "referenceQuery": "cold air intake kit cone filter chrome pipe automotive"
+      }
+    ],
+    "steering": [
+      {
+        "key": "steering_rack",
+        "label": "Steering Rack",
+        "match": {"default": true},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "power steering rack and pinion assembly with tie rods, metal, studio lighting, white background",
+        "referenceQuery": "power steering rack pinion assembly tie rods automotive"
+      }
+    ],
+    "fuel-system": [
+      {
+        "key": "fuel_tank",
+        "label": "Fuel Tank",
+        "match": {"engineType": ["gasoline", "flex fuel", "diesel", "hybrid", "plug-in hybrid"]},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "car fuel tank, metal or plastic tank with fuel pump assembly, studio lighting, white background",
+        "referenceQuery": "car fuel tank with fuel pump assembly automotive"
+      },
+      {
+        "key": "fuel_battery_pack",
+        "label": "Battery Pack",
+        "match": {"engineType": ["electric", "battery electric"]},
+        "scale": [1.5, 0.6, 1.3],
+        "meshyPrompt": "electric vehicle battery pack, flat rectangular pack with battery modules visible, metal housing, studio lighting, white background",
+        "referenceQuery": "electric vehicle battery pack flat Tesla cutaway"
+      }
+    ],
+    "ecu-electronics": [
+      {
+        "key": "ecu_module",
+        "label": "ECU Module",
+        "match": {"default": true},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "car engine control unit ECU module, black plastic box with wiring harness connectors, studio lighting, white background",
+        "referenceQuery": "car ECU engine control unit module automotive"
+      }
+    ],
+    "turbo-supercharger": [
+      {
+        "key": "turbo_unit",
+        "label": "Turbocharger",
+        "match": {"forced_induction": "turbo"},
+        "scale": [1.0, 1.0, 1.0],
+        "meshyPrompt": "car turbocharger unit, turbine and compressor housing with wastegate, metal, studio lighting, white background",
+        "referenceQuery": "turbocharger unit turbine compressor housing automotive"
+      },
+      {
+        "key": "supercharger_unit",
+        "label": "Supercharger",
+        "match": {"forced_induction": "supercharger"},
+        "scale": [1.1, 1.1, 1.1],
+        "meshyPrompt": "roots type supercharger blower, belt driven, metal housing with intake manifold, studio lighting, white background",
+        "referenceQuery": "supercharger blower roots type automotive"
+      }
+    ]
+  },
+  "priority_archetypes": [
+    "engine_i4_turbo",
+    "engine_v6",
+    "engine_v8",
+    "engine_electric_motor",
+    "engine_flat4",
+    "trans_automatic",
+    "trans_manual",
+    "brake_standard",
+    "brake_performance",
+    "suspension_strut",
+    "exhaust_dual",
+    "cooling_radiator",
+    "steering_rack",
+    "fuel_tank",
+    "fuel_battery_pack"
+  ]
+}

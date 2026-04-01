@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #0a0a0f;
+  --color-bg-surface: rgba(255,255,255,0.03);
+  --color-bg-surface-hover: rgba(255,255,255,0.06);
+  --color-bg-surface-active: rgba(255,255,255,0.09);
+  --color-bg-elevated: rgba(255,255,255,0.04);
+
+  --color-border-subtle: rgba(255,255,255,0.06);
+  --color-border-medium: rgba(255,255,255,0.1);
+  --color-border-strong: rgba(255,255,255,0.15);
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255,255,255,0.55);
+  --color-text-tertiary: rgba(255,255,255,0.35);
+  --color-text-muted: rgba(255,255,255,0.2);
+
+  --color-accent-red: rgba(196,30,42,0.9);
+  --color-accent-yellow: rgba(245,197,24,0.8);
+  --color-accent-carbon: rgba(40,40,40,0.8);
+  --color-accent-green: rgba(68,255,136,0.8);
+  --color-accent-amber: rgba(255,180,50,0.8);
+
+  --font-sans: 'Barlow', -apple-system, sans-serif;
+  --font-mono: 'DM Mono', 'JetBrains Mono', monospace;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #0a0a0f;
+  color: #ffffff;
+  font-family: 'Barlow', -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+@keyframes float-slow {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(30px, -20px); }
+  50% { transform: translate(-20px, 30px); }
+  75% { transform: translate(20px, 20px); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(196,30,42,0); }
+  50% { box-shadow: 0 0 20px 4px rgba(196,30,42,0.15); }
+}
+
+@keyframes rpgPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+
+select option {
+  background: #12121a;
+  color: #ffffff;
+  padding: 8px 12px;
+}

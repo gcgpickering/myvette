@@ -1,0 +1,1520 @@
+import type { GenerationCode } from './corvette-generations'
+
+export type MeshZone =
+  | 'body'
+  | 'doors'
+  | 'hood'
+  | 'trunk'
+  | 'roof'
+  | 'wheels'
+  | 'brakes'
+  | 'glass'
+  | 'chrome'
+  | 'rubber'
+  | 'lights'
+  | 'engine'
+  | 'exhaust'
+  | 'transmission'
+  | 'intake'
+  | 'cooling'
+  | 'fuel'
+  | 'suspension'
+  | 'steering'
+  | 'interior'
+  | 'undercarriage'
+  | 'badges'
+  | 'other'
+
+export interface MeshMapping {
+  zone: MeshZone
+  clickable: boolean
+  explodable: boolean
+  colorable: boolean
+  label: string
+  explodeDirection?: [number, number, number]
+  xrayOpacity?: number
+}
+
+// Per-generation mesh maps. Keys are node name PREFIXES that match via startsWith.
+// The matcher strips trailing material suffixes (anything after the last underscore
+// that looks like a material name) and also strips .001/.002 suffixes for C6.
+export type GenerationMeshMap = Record<string, MeshMapping>
+
+// ---------------------------------------------------------------------------
+// C3 (1969 Stingray) - Generic mesh names, use material heuristics fallback
+// ---------------------------------------------------------------------------
+const c3Map: GenerationMeshMap = {}
+
+// ---------------------------------------------------------------------------
+// C4 (1990) - Excellent mesh names
+// ---------------------------------------------------------------------------
+const c4Map: GenerationMeshMap = {
+  c4_c_body: {
+    zone: 'body',
+    clickable: true,
+    explodable: false,
+    colorable: true,
+    label: 'Body',
+    xrayOpacity: 0.15,
+  },
+  c4_f_bumper: {
+    zone: 'body',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Front Bumper',
+    explodeDirection: [0, 0, 1.5],
+    xrayOpacity: 0.15,
+  },
+  c4_r_bumper: {
+    zone: 'body',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Rear Bumper',
+    explodeDirection: [0, 0, -1.5],
+    xrayOpacity: 0.15,
+  },
+  c4_driver_door: {
+    zone: 'doors',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Driver Door',
+    explodeDirection: [-2, 0, 0],
+    xrayOpacity: 0.15,
+  },
+  c4_passnger_door: {
+    zone: 'doors',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Passenger Door',
+    explodeDirection: [2, 0, 0],
+    xrayOpacity: 0.15,
+  },
+  c4_hood: {
+    zone: 'hood',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Hood',
+    explodeDirection: [0, 1, 1],
+    xrayOpacity: 0.15,
+  },
+  c4_skirt_stock: {
+    zone: 'body',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Side Skirts',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 0.15,
+  },
+  c4_stock_rim: {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Wheel',
+    explodeDirection: [-1.5, 0, 0],
+    xrayOpacity: 1.0,
+  },
+  tire: {
+    zone: 'rubber',
+    clickable: false,
+    explodable: true,
+    colorable: false,
+    label: 'Tire',
+    explodeDirection: [-1.5, 0, 0],
+    xrayOpacity: 1.0,
+  },
+  c4_exhaust: {
+    zone: 'exhaust',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Exhaust',
+    explodeDirection: [0, -0.5, -1],
+    xrayOpacity: 1.0,
+  },
+  c4_steeringwheel: {
+    zone: 'steering',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Steering Wheel',
+    xrayOpacity: 1.0,
+  },
+  dashboard: {
+    zone: 'interior',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Dashboard',
+    xrayOpacity: 1.0,
+  },
+  int_body: {
+    zone: 'interior',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Interior Panels',
+    xrayOpacity: 1.0,
+  },
+  int_glass: {
+    zone: 'glass',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Windshield',
+    xrayOpacity: 0.15,
+  },
+  trunk_glass: {
+    zone: 'glass',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Rear Glass',
+    xrayOpacity: 0.15,
+  },
+  headlights: {
+    zone: 'lights',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Headlights',
+    explodeDirection: [0, 0.3, 0.5],
+    xrayOpacity: 1.0,
+  },
+  tailights: {
+    zone: 'lights',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Taillights',
+    explodeDirection: [0, 0.3, -0.5],
+    xrayOpacity: 1.0,
+  },
+  underside: {
+    zone: 'undercarriage',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Undercarriage',
+    xrayOpacity: 1.0,
+  },
+  Logo_f: {
+    zone: 'badges',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Front Badge',
+    xrayOpacity: 1.0,
+  },
+  Logo_R: {
+    zone: 'badges',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Rear Badge',
+    xrayOpacity: 1.0,
+  },
+  rpm_dial: {
+    zone: 'interior',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'RPM Gauge',
+    xrayOpacity: 1.0,
+  },
+  other_dials: {
+    zone: 'interior',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Gauges',
+    xrayOpacity: 1.0,
+  },
+  Plane001: {
+    zone: 'other',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'License Plate',
+    xrayOpacity: 1.0,
+  },
+}
+
+// ---------------------------------------------------------------------------
+// C5 (1997) - Generic mesh names, use material heuristics fallback
+// ---------------------------------------------------------------------------
+const c5Map: GenerationMeshMap = {}
+
+// ---------------------------------------------------------------------------
+// C6 ZR1 (2009) - Excellent names with RLA_C6_ prefix
+// Strip .001/.002 suffixes before matching.
+// ---------------------------------------------------------------------------
+const c6Map: GenerationMeshMap = {
+  // Body / exterior panels
+  RLA_C6_body: {
+    zone: 'body',
+    clickable: true,
+    explodable: false,
+    colorable: true,
+    label: 'Body',
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_door_L: {
+    zone: 'doors',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Left Door',
+    explodeDirection: [-2, 0, 0],
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_door_R: {
+    zone: 'doors',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Right Door',
+    explodeDirection: [2, 0, 0],
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_hood_a: {
+    zone: 'hood',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Hood',
+    explodeDirection: [0, 1, 1],
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_hood_b: {
+    zone: 'hood',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Hood Inner',
+    explodeDirection: [0, 1, 1],
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_trunk: {
+    zone: 'trunk',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Trunk',
+    explodeDirection: [0, 1, -1],
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_fender_L: {
+    zone: 'body',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Left Fender',
+    explodeDirection: [-1.5, 0.3, 0],
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_fender_R: {
+    zone: 'body',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Right Fender',
+    explodeDirection: [1.5, 0.3, 0],
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_bumper_F: {
+    zone: 'body',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Front Bumper',
+    explodeDirection: [0, 0, 1.5],
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_bumper_R: {
+    zone: 'body',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Rear Bumper',
+    explodeDirection: [0, 0, -1.5],
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_roof_a: {
+    zone: 'roof',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Roof',
+    explodeDirection: [0, 1.5, 0],
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_roof_b: {
+    zone: 'roof',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Roof Panel',
+    explodeDirection: [0, 1.5, 0],
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_skirt_a: {
+    zone: 'body',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Side Skirt',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_skirt_b: {
+    zone: 'body',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Side Skirt',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_wing: {
+    zone: 'body',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Spoiler',
+    explodeDirection: [0, 0.5, -0.5],
+    xrayOpacity: 0.15,
+  },
+
+  // Engine
+  RLA_C6_block: {
+    zone: 'engine',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Engine Block',
+    explodeDirection: [0, 1.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_cover: {
+    zone: 'engine',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Engine Cover',
+    explodeDirection: [0, 1.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_valve_covers: {
+    zone: 'engine',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Valve Covers',
+    explodeDirection: [0, 1.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_engine_bay: {
+    zone: 'engine',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Engine Bay',
+    xrayOpacity: 1.0,
+  },
+
+  // Exhaust
+  RLA_C6_exhaust: {
+    zone: 'exhaust',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Exhaust',
+    explodeDirection: [0, -0.5, -1],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_exhaust_R: {
+    zone: 'exhaust',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Right Exhaust',
+    explodeDirection: [0.5, -0.5, -1],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_exhaust_L: {
+    zone: 'exhaust',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Left Exhaust',
+    explodeDirection: [-0.5, -0.5, -1],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_exhaust_manifold: {
+    zone: 'exhaust',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Exhaust Manifold',
+    explodeDirection: [0, -0.5, -1],
+    xrayOpacity: 1.0,
+  },
+
+  // Transmission / drivetrain
+  RLA_C6_transmission: {
+    zone: 'transmission',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Transmission',
+    explodeDirection: [0, -1, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_driveshaft: {
+    zone: 'transmission',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Driveshaft',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_halfshaft_R: {
+    zone: 'transmission',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Halfshaft',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_diff: {
+    zone: 'transmission',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Differential',
+    explodeDirection: [0, -0.8, 0],
+    xrayOpacity: 1.0,
+  },
+
+  // Intake
+  RLA_C6_intake: {
+    zone: 'intake',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Intake',
+    explodeDirection: [0, 1.2, 0.5],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_intake_manifold: {
+    zone: 'intake',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Intake Manifold',
+    explodeDirection: [0, 1.2, 0.5],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_intake_filter: {
+    zone: 'intake',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Air Filter',
+    explodeDirection: [0, 1.2, 0.5],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_intake_a: {
+    zone: 'intake',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Intake Tube',
+    explodeDirection: [0, 1.2, 0.5],
+    xrayOpacity: 1.0,
+  },
+
+  // Cooling
+  RLA_C6_radiator: {
+    zone: 'cooling',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Radiator',
+    explodeDirection: [0, 0.5, 1.5],
+    xrayOpacity: 1.0,
+  },
+
+  // Fuel
+  RLA_C6_fueltank: {
+    zone: 'fuel',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Fuel Tank',
+    explodeDirection: [0, -1, 0],
+    xrayOpacity: 1.0,
+  },
+
+  // Wheels
+  RLA_C6_rim: {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Wheel',
+    explodeDirection: [-1.5, 0, 0],
+    xrayOpacity: 1.0,
+  },
+
+  // Suspension
+  RLA_C6_strut_F: {
+    zone: 'suspension',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Strut',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_shock_R: {
+    zone: 'suspension',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Shock',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_spring_R: {
+    zone: 'suspension',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Spring',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_lowerarm_F_a: {
+    zone: 'suspension',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Lower Arm A',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_lowerarm_F_b: {
+    zone: 'suspension',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Lower Arm B',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_lowerarm_R: {
+    zone: 'suspension',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Lower Arm',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_upperarm_R: {
+    zone: 'suspension',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Upper Arm',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_subframe_F: {
+    zone: 'suspension',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Subframe',
+    explodeDirection: [0, -0.8, 0.5],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_subframe_R: {
+    zone: 'suspension',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Subframe',
+    explodeDirection: [0, -0.8, -0.5],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_swaybar_F: {
+    zone: 'suspension',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Sway Bar',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_swaybar_R: {
+    zone: 'suspension',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Sway Bar',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 1.0,
+  },
+
+  // Steering
+  RLA_C6_steeringbox: {
+    zone: 'steering',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Steering Box',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_tierod_F: {
+    zone: 'steering',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Tie Rod',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_tierod_R: {
+    zone: 'steering',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Tie Rod',
+    explodeDirection: [0, -0.5, 0],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_steeringwheel: {
+    zone: 'steering',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Steering Wheel',
+    xrayOpacity: 1.0,
+  },
+
+  // Glass
+  RLA_C6_windshield: {
+    zone: 'glass',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Windshield',
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_glassL: {
+    zone: 'glass',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Left Window',
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_glassR: {
+    zone: 'glass',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Right Window',
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_glassRear: {
+    zone: 'glass',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Rear Window',
+    xrayOpacity: 0.15,
+  },
+
+  // Lights
+  RLA_C6_headlight_L: {
+    zone: 'lights',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Headlight',
+    explodeDirection: [0, 0.3, 0.5],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_taillight_L: {
+    zone: 'lights',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Left Taillight',
+    explodeDirection: [0, 0.3, -0.5],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_taillight_R_b: {
+    zone: 'lights',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Right Taillight',
+    explodeDirection: [0, 0.3, -0.5],
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_reverse: {
+    zone: 'lights',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Reverse Lights',
+    xrayOpacity: 1.0,
+  },
+
+  // Mirrors
+  RLA_C6_mirror_L: {
+    zone: 'chrome',
+    clickable: false,
+    explodable: false,
+    colorable: true,
+    label: 'Left Mirror',
+    xrayOpacity: 0.15,
+  },
+  RLA_C6_mirror_R: {
+    zone: 'chrome',
+    clickable: false,
+    explodable: false,
+    colorable: true,
+    label: 'Right Mirror',
+    xrayOpacity: 0.15,
+  },
+
+  // Interior
+  RLA_C6_seat_L: {
+    zone: 'interior',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Left Seat',
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_seat_R: {
+    zone: 'interior',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Right Seat',
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_dash: {
+    zone: 'interior',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Dashboard',
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_interior: {
+    zone: 'interior',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Interior',
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_floor: {
+    zone: 'interior',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Floor',
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_centerconsole: {
+    zone: 'interior',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Center Console',
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_doorcard_L: {
+    zone: 'interior',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Left Door Card',
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_doorcard_R: {
+    zone: 'interior',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Right Door Card',
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_radio: {
+    zone: 'interior',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Radio',
+    xrayOpacity: 1.0,
+  },
+
+  // Other exterior
+  RLA_C6_wipers: {
+    zone: 'other',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Wipers',
+    xrayOpacity: 1.0,
+  },
+
+  // Undercarriage
+  RLA_C6_undercarriage: {
+    zone: 'undercarriage',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Undercarriage',
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_heatshield: {
+    zone: 'undercarriage',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Heat Shield',
+    xrayOpacity: 1.0,
+  },
+  RLA_C6_radsupport: {
+    zone: 'undercarriage',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Radiator Support',
+    xrayOpacity: 1.0,
+  },
+}
+
+// ---------------------------------------------------------------------------
+// C7 Stingray (2014) - Good names, some multi-material meshes
+// ---------------------------------------------------------------------------
+const c7Map: GenerationMeshMap = {
+  'CarBody 1': {
+    zone: 'body',
+    clickable: true,
+    explodable: false,
+    colorable: true,
+    label: 'Body',
+    xrayOpacity: 0.15,
+  },
+  'CarBody 2': {
+    zone: 'other',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Trim & Details',
+    xrayOpacity: 0.15,
+  },
+  'CarBody 3': {
+    zone: 'undercarriage',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Undercarriage',
+    xrayOpacity: 1.0,
+  },
+  'Rim FL': {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Left Rim',
+    explodeDirection: [-1.5, 0, 0.5],
+    xrayOpacity: 1.0,
+  },
+  'Rim FR': {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Right Rim',
+    explodeDirection: [1.5, 0, 0.5],
+    xrayOpacity: 1.0,
+  },
+  'Rim RL': {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Left Rim',
+    explodeDirection: [-1.5, 0, -0.5],
+    xrayOpacity: 1.0,
+  },
+  'Rim RR': {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Right Rim',
+    explodeDirection: [1.5, 0, -0.5],
+    xrayOpacity: 1.0,
+  },
+  'Tire FL': {
+    zone: 'rubber',
+    clickable: false,
+    explodable: true,
+    colorable: false,
+    label: 'Front Left Tire',
+    explodeDirection: [-1.5, 0, 0.5],
+    xrayOpacity: 1.0,
+  },
+  'Tire FR': {
+    zone: 'rubber',
+    clickable: false,
+    explodable: true,
+    colorable: false,
+    label: 'Front Right Tire',
+    explodeDirection: [1.5, 0, 0.5],
+    xrayOpacity: 1.0,
+  },
+  'Tire RL': {
+    zone: 'rubber',
+    clickable: false,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Left Tire',
+    explodeDirection: [-1.5, 0, -0.5],
+    xrayOpacity: 1.0,
+  },
+  'Tire RR': {
+    zone: 'rubber',
+    clickable: false,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Right Tire',
+    explodeDirection: [1.5, 0, -0.5],
+    xrayOpacity: 1.0,
+  },
+  'Brake Caliper FL': {
+    zone: 'brakes',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Left Caliper',
+    explodeDirection: [-1.5, 0, 0.5],
+    xrayOpacity: 1.0,
+  },
+  'Brake Caliper FR': {
+    zone: 'brakes',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Right Caliper',
+    explodeDirection: [1.5, 0, 0.5],
+    xrayOpacity: 1.0,
+  },
+  'Brake Caliper RL': {
+    zone: 'brakes',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Left Caliper',
+    explodeDirection: [-1.5, 0, -0.5],
+    xrayOpacity: 1.0,
+  },
+  'Brake Caliper RR': {
+    zone: 'brakes',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Right Caliper',
+    explodeDirection: [1.5, 0, -0.5],
+    xrayOpacity: 1.0,
+  },
+  'Brake Disc FL': {
+    zone: 'brakes',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Left Disc',
+    explodeDirection: [-1.5, 0, 0.5],
+    xrayOpacity: 1.0,
+  },
+  'Brake Disc FR': {
+    zone: 'brakes',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Right Disc',
+    explodeDirection: [1.5, 0, 0.5],
+    xrayOpacity: 1.0,
+  },
+  'Brake Disc RL': {
+    zone: 'brakes',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Left Disc',
+    explodeDirection: [-1.5, 0, -0.5],
+    xrayOpacity: 1.0,
+  },
+  'Brake Disc RR': {
+    zone: 'brakes',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Right Disc',
+    explodeDirection: [1.5, 0, -0.5],
+    xrayOpacity: 1.0,
+  },
+  'License Plate': {
+    zone: 'other',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'License Plate',
+    xrayOpacity: 1.0,
+  },
+}
+
+// ---------------------------------------------------------------------------
+// C8 Stingray (2020) - Excellent names (with some typos preserved)
+// ---------------------------------------------------------------------------
+const c8Map: GenerationMeshMap = {
+  // Body / exterior shell
+  'Main Chassis': {
+    zone: 'body',
+    clickable: true,
+    explodable: false,
+    colorable: true,
+    label: 'Body & Chassis',
+    xrayOpacity: 0.15,
+  },
+  'Left Door': {
+    zone: 'doors',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Left Door',
+    explodeDirection: [-2, 0, 0],
+    xrayOpacity: 0.15,
+  },
+  'Right Door': {
+    zone: 'doors',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Right Door',
+    explodeDirection: [2, 0, 0],
+    xrayOpacity: 0.15,
+  },
+  'Left Door Glass': {
+    zone: 'glass',
+    clickable: false,
+    explodable: true,
+    colorable: false,
+    label: 'Left Door Glass',
+    explodeDirection: [-2, 0, 0],
+    xrayOpacity: 0.15,
+  },
+  'Right Door Glass': {
+    zone: 'glass',
+    clickable: false,
+    explodable: true,
+    colorable: false,
+    label: 'Right Door Glass',
+    explodeDirection: [2, 0, 0],
+    xrayOpacity: 0.15,
+  },
+  Roof: {
+    zone: 'roof',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Roof',
+    explodeDirection: [0, 1.5, 0],
+    xrayOpacity: 0.15,
+  },
+  Frunk: {
+    zone: 'hood',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Frunk',
+    explodeDirection: [0, 1, 1],
+    xrayOpacity: 0.15,
+  },
+  Trunk: {
+    zone: 'trunk',
+    clickable: true,
+    explodable: true,
+    colorable: true,
+    label: 'Trunk / Engine Cover',
+    explodeDirection: [0, 1, -1],
+    xrayOpacity: 0.15,
+  },
+  'Trunk Glass': {
+    zone: 'glass',
+    clickable: false,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Engine Glass',
+    explodeDirection: [0, 1, -1],
+    xrayOpacity: 0.15,
+  },
+
+  // Engine
+  '6.2L LT2 V8 Engine and Engine Bay': {
+    zone: 'engine',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: '6.2L LT2 V8 Engine',
+    explodeDirection: [0, 1.5, 0],
+    xrayOpacity: 1.0,
+  },
+  'Engine Bay Bolts': {
+    zone: 'engine',
+    clickable: false,
+    explodable: true,
+    colorable: false,
+    label: 'Engine Bay Bolts',
+    explodeDirection: [0, 1.5, 0],
+    xrayOpacity: 1.0,
+  },
+
+  // Carbon fiber trim
+  'Carbon FIber': {
+    zone: 'chrome',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Carbon Fiber Trim',
+    xrayOpacity: 0.15,
+  },
+
+  // Interior
+  Interior: {
+    zone: 'interior',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Interior',
+    xrayOpacity: 1.0,
+  },
+  'Interior Stitches': {
+    zone: 'interior',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Interior Stitches',
+    xrayOpacity: 1.0,
+  },
+  'Interior Digitals': {
+    zone: 'interior',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Displays',
+    xrayOpacity: 1.0,
+  },
+  'Interior Trim': {
+    zone: 'interior',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Interior Trim',
+    xrayOpacity: 1.0,
+  },
+  'Steering Wheel': {
+    zone: 'steering',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Steering Wheel',
+    xrayOpacity: 1.0,
+  },
+  'Steering Wheel Decals': {
+    zone: 'steering',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Steering Wheel Decals',
+    xrayOpacity: 1.0,
+  },
+  'Speedo Needle': {
+    zone: 'interior',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Speedometer Needle',
+    xrayOpacity: 1.0,
+  },
+
+  // Glass
+  Glasses: {
+    zone: 'glass',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Windshield & Windows',
+    xrayOpacity: 0.15,
+  },
+
+  // Wheels (each node contains tire+rim+disc)
+  'Front Left Wheel': {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Left Wheel',
+    explodeDirection: [-1.5, 0, 0.5],
+    xrayOpacity: 1.0,
+  },
+  'Front Right Wheel': {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Right Wheel',
+    explodeDirection: [1.5, 0, 0.5],
+    xrayOpacity: 1.0,
+  },
+  'Rear Left Wheel': {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Left Wheel',
+    explodeDirection: [-1.5, 0, -0.5],
+    xrayOpacity: 1.0,
+  },
+  'Rear Right Wheel': {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Right Wheel',
+    explodeDirection: [1.5, 0, -0.5],
+    xrayOpacity: 1.0,
+  },
+
+  // Brake calipers
+  'Front Left Brake Caliper': {
+    zone: 'brakes',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Left Caliper',
+    explodeDirection: [-1.5, 0, 0.5],
+    xrayOpacity: 1.0,
+  },
+  'Front Right Brake Caliper': {
+    zone: 'brakes',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Front Right Caliper',
+    explodeDirection: [1.5, 0, 0.5],
+    xrayOpacity: 1.0,
+  },
+  'Rear Left Brake Caliper': {
+    zone: 'brakes',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Left Caliper',
+    explodeDirection: [-1.5, 0, -0.5],
+    xrayOpacity: 1.0,
+  },
+  'Rear Right Brake Caliper': {
+    zone: 'brakes',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Rear Right Caliper',
+    explodeDirection: [1.5, 0, -0.5],
+    xrayOpacity: 1.0,
+  },
+
+  // Suspension
+  SUSpension: {
+    zone: 'suspension',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Suspension',
+    explodeDirection: [0, -0.8, 0],
+    xrayOpacity: 1.0,
+  },
+
+  // Lights
+  'Headlights Housing': {
+    zone: 'lights',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Headlight Housing',
+    explodeDirection: [0, 0.3, 0.5],
+    xrayOpacity: 1.0,
+  },
+  Headlights: {
+    zone: 'lights',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Headlights',
+    explodeDirection: [0, 0.3, 0.5],
+    xrayOpacity: 1.0,
+  },
+  'Day Lights': {
+    zone: 'lights',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Daytime Running Lights',
+    xrayOpacity: 1.0,
+  },
+  Taillights: {
+    zone: 'lights',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Taillights',
+    explodeDirection: [0, 0.3, -0.5],
+    xrayOpacity: 1.0,
+  },
+  'Brake Lights': {
+    zone: 'lights',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Brake Lights',
+    xrayOpacity: 1.0,
+  },
+  'Reverse Lights': {
+    zone: 'lights',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Reverse Lights',
+    xrayOpacity: 1.0,
+  },
+  'License Plate Lights': {
+    zone: 'lights',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'License Plate Lights',
+    xrayOpacity: 1.0,
+  },
+
+  // Indicators
+  turnlight_r: {
+    zone: 'lights',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Turn Signal',
+    xrayOpacity: 1.0,
+  },
+  'Right Indicator': {
+    zone: 'lights',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Right Indicator',
+    xrayOpacity: 1.0,
+  },
+  'Left Indicator': {
+    zone: 'lights',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Left Indicator',
+    xrayOpacity: 1.0,
+  },
+
+  // Badges
+  'Corvette Badge': {
+    zone: 'badges',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Corvette Badge',
+    xrayOpacity: 1.0,
+  },
+
+  // Grille
+  Grille1: {
+    zone: 'chrome',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Front Grille',
+    xrayOpacity: 0.15,
+  },
+
+  // Wipers (note typo "WIper" preserved)
+  'Left Wiper': {
+    zone: 'other',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Left Wiper',
+    xrayOpacity: 1.0,
+  },
+  'Right WIper': {
+    zone: 'other',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Right Wiper',
+    xrayOpacity: 1.0,
+  },
+
+  // License plate
+  'License Plate': {
+    zone: 'other',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'License Plate',
+    xrayOpacity: 1.0,
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Lookup
+// ---------------------------------------------------------------------------
+const meshMaps: Record<GenerationCode, GenerationMeshMap> = {
+  c3: c3Map,
+  c4: c4Map,
+  c5: c5Map,
+  c6: c6Map,
+  c7: c7Map,
+  c8: c8Map,
+}
+
+export function getMeshMap(code: GenerationCode): GenerationMeshMap {
+  return meshMaps[code] ?? {}
+}

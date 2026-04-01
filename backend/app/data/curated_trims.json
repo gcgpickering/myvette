@@ -1,0 +1,467 @@
+{
+  "Honda": {
+    "Civic": {
+      "2022-2025": {
+        "trims": [
+          {"name": "LX", "body": "Sedan", "engine": "2.0L I4", "hp": 158, "torque": 138, "drivetrain": "FWD", "transmission": "CVT", "weight": 2877},
+          {"name": "Sport", "body": "Sedan", "engine": "2.0L I4", "hp": 158, "torque": 138, "drivetrain": "FWD", "transmission": "6MT/CVT", "weight": 2899},
+          {"name": "EX", "body": "Sedan", "engine": "1.5L Turbo I4", "hp": 180, "torque": 177, "drivetrain": "FWD", "transmission": "CVT", "weight": 2952},
+          {"name": "EX-L", "body": "Sedan", "engine": "1.5L Turbo I4", "hp": 180, "torque": 177, "drivetrain": "FWD", "transmission": "CVT", "weight": 2978},
+          {"name": "Touring", "body": "Sedan", "engine": "1.5L Turbo I4", "hp": 180, "torque": 177, "drivetrain": "FWD", "transmission": "CVT", "weight": 2994},
+          {"name": "Si", "body": "Sedan", "engine": "1.5L Turbo I4", "hp": 200, "torque": 192, "drivetrain": "FWD", "transmission": "6MT", "weight": 2952},
+          {"name": "Type R", "body": "Hatchback", "engine": "2.0L Turbo I4", "hp": 315, "torque": 310, "drivetrain": "FWD", "transmission": "6MT", "weight": 3120}
+        ]
+      }
+    },
+    "Accord": {
+      "2023-2025": {
+        "trims": [
+          {"name": "LX", "body": "Sedan", "engine": "1.5L Turbo I4", "hp": 192, "torque": 192, "drivetrain": "FWD", "transmission": "CVT", "weight": 3239},
+          {"name": "EX", "body": "Sedan", "engine": "1.5L Turbo I4", "hp": 192, "torque": 192, "drivetrain": "FWD", "transmission": "CVT", "weight": 3263},
+          {"name": "EX-L", "body": "Sedan", "engine": "1.5L Turbo I4", "hp": 192, "torque": 192, "drivetrain": "FWD", "transmission": "CVT", "weight": 3289},
+          {"name": "Sport", "body": "Sedan", "engine": "1.5L Turbo I4", "hp": 192, "torque": 192, "drivetrain": "FWD", "transmission": "CVT", "weight": 3252},
+          {"name": "Touring", "body": "Sedan", "engine": "2.0L Hybrid I4", "hp": 204, "torque": 247, "drivetrain": "FWD", "transmission": "eCVT", "weight": 3540}
+        ]
+      }
+    },
+    "CR-V": {
+      "2023-2025": {
+        "trims": [
+          {"name": "LX", "body": "SUV", "engine": "1.5L Turbo I4", "hp": 190, "torque": 179, "drivetrain": "FWD", "transmission": "CVT", "weight": 3375},
+          {"name": "EX", "body": "SUV", "engine": "1.5L Turbo I4", "hp": 190, "torque": 179, "drivetrain": "AWD", "transmission": "CVT", "weight": 3475},
+          {"name": "EX-L", "body": "SUV", "engine": "1.5L Turbo I4", "hp": 190, "torque": 179, "drivetrain": "AWD", "transmission": "CVT", "weight": 3504},
+          {"name": "Touring", "body": "SUV", "engine": "2.0L Hybrid I4", "hp": 204, "torque": 247, "drivetrain": "AWD", "transmission": "eCVT", "weight": 3761},
+          {"name": "Sport Touring", "body": "SUV", "engine": "2.0L Hybrid I4", "hp": 204, "torque": 247, "drivetrain": "AWD", "transmission": "eCVT", "weight": 3789}
+        ]
+      }
+    }
+  },
+  "Toyota": {
+    "Camry": {
+      "2022-2024": {
+        "trims": [
+          {"name": "LE", "body": "Sedan", "engine": "2.5L I4", "hp": 203, "torque": 184, "drivetrain": "FWD", "transmission": "8AT", "weight": 3310},
+          {"name": "SE", "body": "Sedan", "engine": "2.5L I4", "hp": 203, "torque": 184, "drivetrain": "FWD", "transmission": "8AT", "weight": 3340},
+          {"name": "XLE", "body": "Sedan", "engine": "2.5L I4", "hp": 203, "torque": 184, "drivetrain": "FWD", "transmission": "8AT", "weight": 3360},
+          {"name": "XSE", "body": "Sedan", "engine": "2.5L I4", "hp": 203, "torque": 184, "drivetrain": "FWD", "transmission": "8AT", "weight": 3370},
+          {"name": "TRD", "body": "Sedan", "engine": "3.5L V6", "hp": 301, "torque": 267, "drivetrain": "FWD", "transmission": "8AT", "weight": 3572}
+        ]
+      }
+    },
+    "Corolla": {
+      "2022-2025": {
+        "trims": [
+          {"name": "L", "body": "Sedan", "engine": "1.8L I4", "hp": 139, "torque": 126, "drivetrain": "FWD", "transmission": "CVT", "weight": 2910},
+          {"name": "LE", "body": "Sedan", "engine": "1.8L I4", "hp": 139, "torque": 126, "drivetrain": "FWD", "transmission": "CVT", "weight": 2925},
+          {"name": "SE", "body": "Sedan", "engine": "2.0L I4", "hp": 169, "torque": 151, "drivetrain": "FWD", "transmission": "CVT", "weight": 2945},
+          {"name": "XLE", "body": "Sedan", "engine": "1.8L I4", "hp": 139, "torque": 126, "drivetrain": "FWD", "transmission": "CVT", "weight": 2955},
+          {"name": "XSE", "body": "Sedan", "engine": "2.0L I4", "hp": 169, "torque": 151, "drivetrain": "FWD", "transmission": "CVT", "weight": 2960}
+        ]
+      }
+    },
+    "RAV4": {
+      "2022-2025": {
+        "trims": [
+          {"name": "LE", "body": "SUV", "engine": "2.5L I4", "hp": 203, "torque": 184, "drivetrain": "FWD", "transmission": "8AT", "weight": 3615},
+          {"name": "XLE", "body": "SUV", "engine": "2.5L I4", "hp": 203, "torque": 184, "drivetrain": "AWD", "transmission": "8AT", "weight": 3715},
+          {"name": "Adventure", "body": "SUV", "engine": "2.5L I4", "hp": 203, "torque": 184, "drivetrain": "AWD", "transmission": "8AT", "weight": 3745},
+          {"name": "TRD Off-Road", "body": "SUV", "engine": "2.5L I4", "hp": 203, "torque": 184, "drivetrain": "AWD", "transmission": "8AT", "weight": 3775},
+          {"name": "Limited", "body": "SUV", "engine": "2.5L I4", "hp": 203, "torque": 184, "drivetrain": "AWD", "transmission": "8AT", "weight": 3800}
+        ]
+      }
+    },
+    "Tacoma": {
+      "2024-2025": {
+        "trims": [
+          {"name": "SR", "body": "Truck", "engine": "2.4L Turbo I4", "hp": 228, "torque": 243, "drivetrain": "RWD", "transmission": "8AT", "weight": 4425},
+          {"name": "SR5", "body": "Truck", "engine": "2.4L Turbo I4", "hp": 228, "torque": 243, "drivetrain": "4WD", "transmission": "8AT", "weight": 4550},
+          {"name": "TRD Sport", "body": "Truck", "engine": "2.4L Turbo I4", "hp": 228, "torque": 243, "drivetrain": "4WD", "transmission": "8AT", "weight": 4600},
+          {"name": "TRD Off-Road", "body": "Truck", "engine": "2.4L Turbo I4", "hp": 228, "torque": 243, "drivetrain": "4WD", "transmission": "6MT/8AT", "weight": 4630},
+          {"name": "Limited", "body": "Truck", "engine": "2.4L Turbo I4", "hp": 228, "torque": 243, "drivetrain": "4WD", "transmission": "8AT", "weight": 4705},
+          {"name": "TRD Pro", "body": "Truck", "engine": "2.4L Turbo I4", "hp": 278, "torque": 317, "drivetrain": "4WD", "transmission": "8AT", "weight": 4725}
+        ]
+      }
+    },
+    "GR86": {
+      "2022-2025": {
+        "trims": [
+          {"name": "Base", "body": "Coupe", "engine": "2.4L Flat-4", "hp": 228, "torque": 184, "drivetrain": "RWD", "transmission": "6MT/6AT", "weight": 2811},
+          {"name": "Premium", "body": "Coupe", "engine": "2.4L Flat-4", "hp": 228, "torque": 184, "drivetrain": "RWD", "transmission": "6MT/6AT", "weight": 2835}
+        ]
+      }
+    },
+    "Supra": {
+      "2022-2025": {
+        "trims": [
+          {"name": "2.0", "body": "Coupe", "engine": "2.0L Turbo I4", "hp": 255, "torque": 295, "drivetrain": "RWD", "transmission": "8AT", "weight": 3181},
+          {"name": "3.0", "body": "Coupe", "engine": "3.0L Turbo I6", "hp": 382, "torque": 368, "drivetrain": "RWD", "transmission": "6MT/8AT", "weight": 3400},
+          {"name": "3.0 Premium", "body": "Coupe", "engine": "3.0L Turbo I6", "hp": 382, "torque": 368, "drivetrain": "RWD", "transmission": "6MT/8AT", "weight": 3410}
+        ]
+      }
+    }
+  },
+  "Ford": {
+    "F-150": {
+      "2021-2025": {
+        "trims": [
+          {"name": "XL", "body": "Truck", "engine": "3.3L V6", "hp": 290, "torque": 265, "drivetrain": "RWD", "transmission": "10AT", "weight": 4451},
+          {"name": "XLT", "body": "Truck", "engine": "2.7L EcoBoost V6", "hp": 325, "torque": 400, "drivetrain": "4WD", "transmission": "10AT", "weight": 4705},
+          {"name": "Lariat", "body": "Truck", "engine": "2.7L EcoBoost V6", "hp": 325, "torque": 400, "drivetrain": "4WD", "transmission": "10AT", "weight": 4865},
+          {"name": "King Ranch", "body": "Truck", "engine": "3.5L EcoBoost V6", "hp": 400, "torque": 500, "drivetrain": "4WD", "transmission": "10AT", "weight": 5015},
+          {"name": "Platinum", "body": "Truck", "engine": "3.5L EcoBoost V6", "hp": 400, "torque": 500, "drivetrain": "4WD", "transmission": "10AT", "weight": 5040},
+          {"name": "Limited", "body": "Truck", "engine": "3.5L EcoBoost V6", "hp": 400, "torque": 500, "drivetrain": "4WD", "transmission": "10AT", "weight": 5090},
+          {"name": "Raptor", "body": "Truck", "engine": "3.5L EcoBoost V6", "hp": 450, "torque": 510, "drivetrain": "4WD", "transmission": "10AT", "weight": 5861},
+          {"name": "Raptor R", "body": "Truck", "engine": "5.2L Supercharged V8", "hp": 720, "torque": 640, "drivetrain": "4WD", "transmission": "10AT", "weight": 6065}
+        ]
+      }
+    },
+    "Mustang": {
+      "2024-2025": {
+        "trims": [
+          {"name": "EcoBoost", "body": "Coupe", "engine": "2.3L EcoBoost I4", "hp": 315, "torque": 350, "drivetrain": "RWD", "transmission": "6MT/10AT", "weight": 3588},
+          {"name": "GT", "body": "Coupe", "engine": "5.0L Coyote V8", "hp": 480, "torque": 415, "drivetrain": "RWD", "transmission": "6MT/10AT", "weight": 3834},
+          {"name": "Mach 1", "body": "Coupe", "engine": "5.0L Coyote V8", "hp": 480, "torque": 418, "drivetrain": "RWD", "transmission": "6MT/10AT", "weight": 3865},
+          {"name": "Dark Horse", "body": "Coupe", "engine": "5.0L Coyote V8", "hp": 500, "torque": 418, "drivetrain": "RWD", "transmission": "6MT/10AT", "weight": 3938}
+        ]
+      }
+    },
+    "Bronco": {
+      "2021-2025": {
+        "trims": [
+          {"name": "Base", "body": "SUV", "engine": "2.3L EcoBoost I4", "hp": 275, "torque": 315, "drivetrain": "4WD", "transmission": "7MT/10AT", "weight": 4343},
+          {"name": "Big Bend", "body": "SUV", "engine": "2.3L EcoBoost I4", "hp": 275, "torque": 315, "drivetrain": "4WD", "transmission": "7MT/10AT", "weight": 4393},
+          {"name": "Black Diamond", "body": "SUV", "engine": "2.3L EcoBoost I4", "hp": 275, "torque": 315, "drivetrain": "4WD", "transmission": "7MT/10AT", "weight": 4474},
+          {"name": "Outer Banks", "body": "SUV", "engine": "2.7L EcoBoost V6", "hp": 330, "torque": 415, "drivetrain": "4WD", "transmission": "10AT", "weight": 4579},
+          {"name": "Badlands", "body": "SUV", "engine": "2.3L EcoBoost I4", "hp": 275, "torque": 315, "drivetrain": "4WD", "transmission": "7MT/10AT", "weight": 4549},
+          {"name": "Wildtrak", "body": "SUV", "engine": "2.7L EcoBoost V6", "hp": 330, "torque": 415, "drivetrain": "4WD", "transmission": "10AT", "weight": 4635},
+          {"name": "Raptor", "body": "SUV", "engine": "3.0L EcoBoost V6", "hp": 418, "torque": 440, "drivetrain": "4WD", "transmission": "10AT", "weight": 5733}
+        ]
+      }
+    }
+  },
+  "Chevrolet": {
+    "Silverado 1500": {
+      "2022-2025": {
+        "trims": [
+          {"name": "WT", "body": "Truck", "engine": "2.7L Turbo I4", "hp": 310, "torque": 430, "drivetrain": "RWD", "transmission": "8AT", "weight": 4400},
+          {"name": "Custom", "body": "Truck", "engine": "2.7L Turbo I4", "hp": 310, "torque": 430, "drivetrain": "4WD", "transmission": "8AT", "weight": 4590},
+          {"name": "LT", "body": "Truck", "engine": "2.7L Turbo I4", "hp": 310, "torque": 430, "drivetrain": "4WD", "transmission": "8AT", "weight": 4640},
+          {"name": "RST", "body": "Truck", "engine": "5.3L V8", "hp": 355, "torque": 383, "drivetrain": "4WD", "transmission": "8AT", "weight": 4840},
+          {"name": "LTZ", "body": "Truck", "engine": "5.3L V8", "hp": 355, "torque": 383, "drivetrain": "4WD", "transmission": "8AT", "weight": 4930},
+          {"name": "High Country", "body": "Truck", "engine": "6.2L V8", "hp": 420, "torque": 460, "drivetrain": "4WD", "transmission": "10AT", "weight": 5050},
+          {"name": "ZR2", "body": "Truck", "engine": "6.2L V8", "hp": 420, "torque": 460, "drivetrain": "4WD", "transmission": "10AT", "weight": 5435},
+          {"name": "Trail Boss", "body": "Truck", "engine": "5.3L V8", "hp": 355, "torque": 383, "drivetrain": "4WD", "transmission": "8AT", "weight": 5070}
+        ]
+      }
+    },
+    "Corvette": {
+      "2023-2025": {
+        "trims": [
+          {"name": "Stingray", "body": "Coupe", "engine": "6.2L V8", "hp": 490, "torque": 465, "drivetrain": "RWD", "transmission": "8DCT", "weight": 3637},
+          {"name": "Z06", "body": "Coupe", "engine": "5.5L Flat-Plane V8", "hp": 670, "torque": 460, "drivetrain": "RWD", "transmission": "8DCT", "weight": 3648},
+          {"name": "E-Ray", "body": "Coupe", "engine": "6.2L V8 + Electric", "hp": 655, "torque": 470, "drivetrain": "AWD", "transmission": "8DCT", "weight": 3936}
+        ]
+      }
+    },
+    "Camaro": {
+      "2022-2024": {
+        "trims": [
+          {"name": "1LT", "body": "Coupe", "engine": "2.0L Turbo I4", "hp": 275, "torque": 295, "drivetrain": "RWD", "transmission": "6MT/10AT", "weight": 3354},
+          {"name": "2SS", "body": "Coupe", "engine": "6.2L V8", "hp": 455, "torque": 455, "drivetrain": "RWD", "transmission": "6MT/10AT", "weight": 3685},
+          {"name": "ZL1", "body": "Coupe", "engine": "6.2L Supercharged V8", "hp": 650, "torque": 650, "drivetrain": "RWD", "transmission": "6MT/10AT", "weight": 3907}
+        ]
+      }
+    }
+  },
+  "Tesla": {
+    "Model 3": {
+      "2024-2025": {
+        "trims": [
+          {"name": "Standard Range", "body": "Sedan", "engine": "Single Motor Electric", "hp": 271, "torque": 317, "drivetrain": "RWD", "transmission": "1-Speed", "weight": 3862},
+          {"name": "Long Range", "body": "Sedan", "engine": "Dual Motor Electric", "hp": 346, "torque": 389, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 4034},
+          {"name": "Performance", "body": "Sedan", "engine": "Dual Motor Electric", "hp": 510, "torque": 546, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 4054}
+        ]
+      }
+    },
+    "Model Y": {
+      "2024-2025": {
+        "trims": [
+          {"name": "Standard Range", "body": "SUV", "engine": "Single Motor Electric", "hp": 271, "torque": 317, "drivetrain": "RWD", "transmission": "1-Speed", "weight": 4096},
+          {"name": "Long Range", "body": "SUV", "engine": "Dual Motor Electric", "hp": 346, "torque": 389, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 4363},
+          {"name": "Performance", "body": "SUV", "engine": "Dual Motor Electric", "hp": 510, "torque": 546, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 4398}
+        ]
+      }
+    },
+    "Model S": {
+      "2024-2025": {
+        "trims": [
+          {"name": "Dual Motor", "body": "Sedan", "engine": "Dual Motor Electric", "hp": 670, "torque": 590, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 4794},
+          {"name": "Plaid", "body": "Sedan", "engine": "Tri Motor Electric", "hp": 1020, "torque": 1050, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 4828}
+        ]
+      }
+    }
+  },
+  "BMW": {
+    "3 Series": {
+      "2023-2025": {
+        "trims": [
+          {"name": "330i", "body": "Sedan", "engine": "2.0L Turbo I4", "hp": 255, "torque": 295, "drivetrain": "RWD", "transmission": "8AT", "weight": 3582},
+          {"name": "330i xDrive", "body": "Sedan", "engine": "2.0L Turbo I4", "hp": 255, "torque": 295, "drivetrain": "AWD", "transmission": "8AT", "weight": 3692},
+          {"name": "M340i", "body": "Sedan", "engine": "3.0L Turbo I6", "hp": 382, "torque": 369, "drivetrain": "RWD", "transmission": "8AT", "weight": 3737},
+          {"name": "M340i xDrive", "body": "Sedan", "engine": "3.0L Turbo I6", "hp": 382, "torque": 369, "drivetrain": "AWD", "transmission": "8AT", "weight": 3836}
+        ]
+      }
+    },
+    "M3": {
+      "2023-2025": {
+        "trims": [
+          {"name": "Base", "body": "Sedan", "engine": "3.0L Turbo I6", "hp": 473, "torque": 406, "drivetrain": "RWD", "transmission": "6MT", "weight": 3840},
+          {"name": "Competition", "body": "Sedan", "engine": "3.0L Turbo I6", "hp": 503, "torque": 479, "drivetrain": "AWD", "transmission": "8AT", "weight": 3990}
+        ]
+      }
+    },
+    "M4": {
+      "2023-2025": {
+        "trims": [
+          {"name": "Base", "body": "Coupe", "engine": "3.0L Turbo I6", "hp": 473, "torque": 406, "drivetrain": "RWD", "transmission": "6MT", "weight": 3830},
+          {"name": "Competition", "body": "Coupe", "engine": "3.0L Turbo I6", "hp": 503, "torque": 479, "drivetrain": "AWD", "transmission": "8AT", "weight": 3985}
+        ]
+      }
+    }
+  },
+  "Subaru": {
+    "WRX": {
+      "2022-2025": {
+        "trims": [
+          {"name": "Base", "body": "Sedan", "engine": "2.4L Turbo Flat-4", "hp": 271, "torque": 258, "drivetrain": "AWD", "transmission": "6MT", "weight": 3411},
+          {"name": "Premium", "body": "Sedan", "engine": "2.4L Turbo Flat-4", "hp": 271, "torque": 258, "drivetrain": "AWD", "transmission": "6MT/CVT", "weight": 3430},
+          {"name": "Limited", "body": "Sedan", "engine": "2.4L Turbo Flat-4", "hp": 271, "torque": 258, "drivetrain": "AWD", "transmission": "CVT", "weight": 3475},
+          {"name": "GT", "body": "Sedan", "engine": "2.4L Turbo Flat-4", "hp": 271, "torque": 258, "drivetrain": "AWD", "transmission": "CVT", "weight": 3527}
+        ]
+      }
+    },
+    "BRZ": {
+      "2022-2025": {
+        "trims": [
+          {"name": "Base", "body": "Coupe", "engine": "2.4L Flat-4", "hp": 228, "torque": 184, "drivetrain": "RWD", "transmission": "6MT/6AT", "weight": 2815},
+          {"name": "Premium", "body": "Coupe", "engine": "2.4L Flat-4", "hp": 228, "torque": 184, "drivetrain": "RWD", "transmission": "6MT/6AT", "weight": 2835},
+          {"name": "tS", "body": "Coupe", "engine": "2.4L Flat-4", "hp": 228, "torque": 184, "drivetrain": "RWD", "transmission": "6MT", "weight": 2833}
+        ]
+      }
+    },
+    "Outback": {
+      "2022-2025": {
+        "trims": [
+          {"name": "Base", "body": "Wagon", "engine": "2.5L Flat-4", "hp": 182, "torque": 176, "drivetrain": "AWD", "transmission": "CVT", "weight": 3636},
+          {"name": "Premium", "body": "Wagon", "engine": "2.5L Flat-4", "hp": 182, "torque": 176, "drivetrain": "AWD", "transmission": "CVT", "weight": 3660},
+          {"name": "Onyx Edition", "body": "Wagon", "engine": "2.4L Turbo Flat-4", "hp": 260, "torque": 277, "drivetrain": "AWD", "transmission": "CVT", "weight": 3810},
+          {"name": "Limited", "body": "Wagon", "engine": "2.5L Flat-4", "hp": 182, "torque": 176, "drivetrain": "AWD", "transmission": "CVT", "weight": 3687},
+          {"name": "Touring", "body": "Wagon", "engine": "2.4L Turbo Flat-4", "hp": 260, "torque": 277, "drivetrain": "AWD", "transmission": "CVT", "weight": 3854},
+          {"name": "Wilderness", "body": "Wagon", "engine": "2.4L Turbo Flat-4", "hp": 260, "torque": 277, "drivetrain": "AWD", "transmission": "CVT", "weight": 3880}
+        ]
+      }
+    },
+    "Crosstrek": {
+      "2024-2025": {
+        "trims": [
+          {"name": "Base", "body": "SUV", "engine": "2.0L Flat-4", "hp": 152, "torque": 145, "drivetrain": "AWD", "transmission": "CVT", "weight": 3341},
+          {"name": "Premium", "body": "SUV", "engine": "2.0L Flat-4", "hp": 152, "torque": 145, "drivetrain": "AWD", "transmission": "CVT", "weight": 3362},
+          {"name": "Sport", "body": "SUV", "engine": "2.5L Flat-4", "hp": 182, "torque": 178, "drivetrain": "AWD", "transmission": "CVT", "weight": 3429},
+          {"name": "Limited", "body": "SUV", "engine": "2.5L Flat-4", "hp": 182, "torque": 178, "drivetrain": "AWD", "transmission": "CVT", "weight": 3456},
+          {"name": "Wilderness", "body": "SUV", "engine": "2.5L Flat-4", "hp": 182, "torque": 178, "drivetrain": "AWD", "transmission": "CVT", "weight": 3477}
+        ]
+      }
+    }
+  },
+  "Dodge": {
+    "Challenger": {
+      "2022-2023": {
+        "trims": [
+          {"name": "SXT", "body": "Coupe", "engine": "3.6L Pentastar V6", "hp": 303, "torque": 268, "drivetrain": "RWD", "transmission": "8AT", "weight": 3841},
+          {"name": "R/T", "body": "Coupe", "engine": "5.7L HEMI V8", "hp": 375, "torque": 410, "drivetrain": "RWD", "transmission": "6MT/8AT", "weight": 4186},
+          {"name": "Scat Pack", "body": "Coupe", "engine": "6.4L HEMI V8", "hp": 485, "torque": 475, "drivetrain": "RWD", "transmission": "6MT/8AT", "weight": 4233},
+          {"name": "Hellcat", "body": "Coupe", "engine": "6.2L Supercharged HEMI V8", "hp": 717, "torque": 656, "drivetrain": "RWD", "transmission": "8AT", "weight": 4448}
+        ]
+      }
+    },
+    "Charger": {
+      "2022-2023": {
+        "trims": [
+          {"name": "SXT", "body": "Sedan", "engine": "3.6L Pentastar V6", "hp": 292, "torque": 260, "drivetrain": "RWD", "transmission": "8AT", "weight": 3964},
+          {"name": "R/T", "body": "Sedan", "engine": "5.7L HEMI V8", "hp": 370, "torque": 395, "drivetrain": "RWD", "transmission": "8AT", "weight": 4188},
+          {"name": "Scat Pack", "body": "Sedan", "engine": "6.4L HEMI V8", "hp": 485, "torque": 475, "drivetrain": "RWD", "transmission": "8AT", "weight": 4381},
+          {"name": "SRT Hellcat", "body": "Sedan", "engine": "6.2L Supercharged HEMI V8", "hp": 717, "torque": 656, "drivetrain": "RWD", "transmission": "8AT", "weight": 4586}
+        ]
+      }
+    }
+  },
+  "RAM": {
+    "1500": {
+      "2022-2025": {
+        "trims": [
+          {"name": "Tradesman", "body": "Truck", "engine": "3.6L Pentastar V6", "hp": 305, "torque": 269, "drivetrain": "RWD", "transmission": "8AT", "weight": 4798},
+          {"name": "Big Horn", "body": "Truck", "engine": "5.7L HEMI V8", "hp": 395, "torque": 410, "drivetrain": "4WD", "transmission": "8AT", "weight": 5206},
+          {"name": "Laramie", "body": "Truck", "engine": "5.7L HEMI V8", "hp": 395, "torque": 410, "drivetrain": "4WD", "transmission": "8AT", "weight": 5376},
+          {"name": "Rebel", "body": "Truck", "engine": "5.7L HEMI V8", "hp": 395, "torque": 410, "drivetrain": "4WD", "transmission": "8AT", "weight": 5467},
+          {"name": "Limited", "body": "Truck", "engine": "5.7L HEMI V8", "hp": 395, "torque": 410, "drivetrain": "4WD", "transmission": "8AT", "weight": 5493},
+          {"name": "TRX", "body": "Truck", "engine": "6.2L Supercharged HEMI V8", "hp": 702, "torque": 650, "drivetrain": "4WD", "transmission": "8AT", "weight": 6395}
+        ]
+      }
+    }
+  },
+  "Jeep": {
+    "Wrangler": {
+      "2022-2025": {
+        "trims": [
+          {"name": "Sport", "body": "SUV", "engine": "3.6L Pentastar V6", "hp": 285, "torque": 260, "drivetrain": "4WD", "transmission": "6MT/8AT", "weight": 4237},
+          {"name": "Sport S", "body": "SUV", "engine": "3.6L Pentastar V6", "hp": 285, "torque": 260, "drivetrain": "4WD", "transmission": "6MT/8AT", "weight": 4266},
+          {"name": "Willys", "body": "SUV", "engine": "3.6L Pentastar V6", "hp": 285, "torque": 260, "drivetrain": "4WD", "transmission": "6MT/8AT", "weight": 4290},
+          {"name": "Sahara", "body": "SUV", "engine": "2.0L Turbo I4", "hp": 270, "torque": 295, "drivetrain": "4WD", "transmission": "8AT", "weight": 4495},
+          {"name": "Rubicon", "body": "SUV", "engine": "3.6L Pentastar V6", "hp": 285, "torque": 260, "drivetrain": "4WD", "transmission": "6MT/8AT", "weight": 4623}
+        ]
+      }
+    },
+    "Grand Cherokee": {
+      "2022-2025": {
+        "trims": [
+          {"name": "Laredo", "body": "SUV", "engine": "3.6L Pentastar V6", "hp": 293, "torque": 260, "drivetrain": "RWD", "transmission": "8AT", "weight": 4363},
+          {"name": "Limited", "body": "SUV", "engine": "3.6L Pentastar V6", "hp": 293, "torque": 260, "drivetrain": "4WD", "transmission": "8AT", "weight": 4635},
+          {"name": "Overland", "body": "SUV", "engine": "5.7L HEMI V8", "hp": 357, "torque": 390, "drivetrain": "4WD", "transmission": "8AT", "weight": 4930},
+          {"name": "Summit", "body": "SUV", "engine": "5.7L HEMI V8", "hp": 357, "torque": 390, "drivetrain": "4WD", "transmission": "8AT", "weight": 4979},
+          {"name": "Trailhawk", "body": "SUV", "engine": "5.7L HEMI V8", "hp": 357, "torque": 390, "drivetrain": "4WD", "transmission": "8AT", "weight": 5025}
+        ]
+      }
+    }
+  },
+  "Hyundai": {
+    "Elantra": {
+      "2022-2025": {
+        "trims": [
+          {"name": "SE", "body": "Sedan", "engine": "2.0L I4", "hp": 147, "torque": 132, "drivetrain": "FWD", "transmission": "CVT", "weight": 2816},
+          {"name": "SEL", "body": "Sedan", "engine": "2.0L I4", "hp": 147, "torque": 132, "drivetrain": "FWD", "transmission": "CVT", "weight": 2844},
+          {"name": "N Line", "body": "Sedan", "engine": "1.6L Turbo I4", "hp": 201, "torque": 195, "drivetrain": "FWD", "transmission": "7DCT", "weight": 2921},
+          {"name": "Limited", "body": "Sedan", "engine": "2.0L I4", "hp": 147, "torque": 132, "drivetrain": "FWD", "transmission": "CVT", "weight": 2868},
+          {"name": "N", "body": "Sedan", "engine": "2.0L Turbo I4", "hp": 276, "torque": 289, "drivetrain": "FWD", "transmission": "6MT/8DCT", "weight": 3219}
+        ]
+      }
+    },
+    "Tucson": {
+      "2022-2025": {
+        "trims": [
+          {"name": "SE", "body": "SUV", "engine": "2.5L I4", "hp": 187, "torque": 178, "drivetrain": "FWD", "transmission": "8AT", "weight": 3491},
+          {"name": "SEL", "body": "SUV", "engine": "2.5L I4", "hp": 187, "torque": 178, "drivetrain": "AWD", "transmission": "8AT", "weight": 3649},
+          {"name": "N Line", "body": "SUV", "engine": "2.5L Turbo I4", "hp": 277, "torque": 311, "drivetrain": "AWD", "transmission": "8DCT", "weight": 3811},
+          {"name": "Limited", "body": "SUV", "engine": "2.5L I4", "hp": 187, "torque": 178, "drivetrain": "AWD", "transmission": "8AT", "weight": 3715}
+        ]
+      }
+    },
+    "Ioniq 5": {
+      "2024-2025": {
+        "trims": [
+          {"name": "SE Standard Range", "body": "SUV", "engine": "Single Motor Electric", "hp": 168, "torque": 258, "drivetrain": "RWD", "transmission": "1-Speed", "weight": 4078},
+          {"name": "SE Long Range", "body": "SUV", "engine": "Single Motor Electric", "hp": 225, "torque": 258, "drivetrain": "RWD", "transmission": "1-Speed", "weight": 4254},
+          {"name": "SEL", "body": "SUV", "engine": "Dual Motor Electric", "hp": 320, "torque": 446, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 4547},
+          {"name": "Limited", "body": "SUV", "engine": "Dual Motor Electric", "hp": 320, "torque": 446, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 4585}
+        ]
+      }
+    }
+  },
+  "Nissan": {
+    "Z": {
+      "2023-2025": {
+        "trims": [
+          {"name": "Sport", "body": "Coupe", "engine": "3.0L Twin-Turbo V6", "hp": 400, "torque": 350, "drivetrain": "RWD", "transmission": "6MT/9AT", "weight": 3494},
+          {"name": "Performance", "body": "Coupe", "engine": "3.0L Twin-Turbo V6", "hp": 400, "torque": 350, "drivetrain": "RWD", "transmission": "6MT/9AT", "weight": 3536},
+          {"name": "Nismo", "body": "Coupe", "engine": "3.0L Twin-Turbo V6", "hp": 420, "torque": 384, "drivetrain": "RWD", "transmission": "9AT", "weight": 3580}
+        ]
+      }
+    },
+    "Altima": {
+      "2022-2025": {
+        "trims": [
+          {"name": "S", "body": "Sedan", "engine": "2.5L I4", "hp": 188, "torque": 180, "drivetrain": "FWD", "transmission": "CVT", "weight": 3244},
+          {"name": "SV", "body": "Sedan", "engine": "2.5L I4", "hp": 188, "torque": 180, "drivetrain": "FWD", "transmission": "CVT", "weight": 3268},
+          {"name": "SR", "body": "Sedan", "engine": "2.5L I4", "hp": 188, "torque": 180, "drivetrain": "FWD", "transmission": "CVT", "weight": 3270},
+          {"name": "SL", "body": "Sedan", "engine": "2.5L I4", "hp": 188, "torque": 180, "drivetrain": "FWD", "transmission": "CVT", "weight": 3289},
+          {"name": "Platinum", "body": "Sedan", "engine": "2.5L I4", "hp": 188, "torque": 180, "drivetrain": "AWD", "transmission": "CVT", "weight": 3461}
+        ]
+      }
+    },
+    "Rogue": {
+      "2022-2025": {
+        "trims": [
+          {"name": "S", "body": "SUV", "engine": "1.5L Turbo I3", "hp": 201, "torque": 225, "drivetrain": "FWD", "transmission": "CVT", "weight": 3534},
+          {"name": "SV", "body": "SUV", "engine": "1.5L Turbo I3", "hp": 201, "torque": 225, "drivetrain": "AWD", "transmission": "CVT", "weight": 3688},
+          {"name": "SL", "body": "SUV", "engine": "1.5L Turbo I3", "hp": 201, "torque": 225, "drivetrain": "AWD", "transmission": "CVT", "weight": 3723},
+          {"name": "Platinum", "body": "SUV", "engine": "1.5L Turbo I3", "hp": 201, "torque": 225, "drivetrain": "AWD", "transmission": "CVT", "weight": 3755}
+        ]
+      }
+    }
+  },
+  "Porsche": {
+    "911": {
+      "2022-2025": {
+        "trims": [
+          {"name": "Carrera", "body": "Coupe", "engine": "3.0L Twin-Turbo Flat-6", "hp": 379, "torque": 331, "drivetrain": "RWD", "transmission": "8PDK", "weight": 3354},
+          {"name": "Carrera S", "body": "Coupe", "engine": "3.0L Twin-Turbo Flat-6", "hp": 443, "torque": 390, "drivetrain": "RWD", "transmission": "8PDK", "weight": 3382},
+          {"name": "GT3", "body": "Coupe", "engine": "4.0L NA Flat-6", "hp": 502, "torque": 346, "drivetrain": "RWD", "transmission": "6MT/7PDK", "weight": 3164},
+          {"name": "Turbo", "body": "Coupe", "engine": "3.7L Twin-Turbo Flat-6", "hp": 572, "torque": 553, "drivetrain": "AWD", "transmission": "8PDK", "weight": 3636},
+          {"name": "Turbo S", "body": "Coupe", "engine": "3.7L Twin-Turbo Flat-6", "hp": 640, "torque": 590, "drivetrain": "AWD", "transmission": "8PDK", "weight": 3636}
+        ]
+      }
+    },
+    "Cayenne": {
+      "2024-2025": {
+        "trims": [
+          {"name": "Base", "body": "SUV", "engine": "3.0L Turbo V6", "hp": 348, "torque": 368, "drivetrain": "AWD", "transmission": "8AT", "weight": 4597},
+          {"name": "S", "body": "SUV", "engine": "4.0L Twin-Turbo V8", "hp": 468, "torque": 442, "drivetrain": "AWD", "transmission": "8AT", "weight": 4762},
+          {"name": "GTS", "body": "SUV", "engine": "4.0L Twin-Turbo V8", "hp": 493, "torque": 457, "drivetrain": "AWD", "transmission": "8AT", "weight": 4827},
+          {"name": "Turbo GT", "body": "SUV", "engine": "4.0L Twin-Turbo V8", "hp": 651, "torque": 627, "drivetrain": "AWD", "transmission": "8AT", "weight": 5037}
+        ]
+      }
+    },
+    "Macan": {
+      "2024-2025": {
+        "trims": [
+          {"name": "Base", "body": "SUV", "engine": "Electric Dual Motor", "hp": 335, "torque": 487, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 4784},
+          {"name": "4", "body": "SUV", "engine": "Electric Dual Motor", "hp": 402, "torque": 487, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 4850},
+          {"name": "4S", "body": "SUV", "engine": "Electric Dual Motor", "hp": 509, "torque": 607, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 4960},
+          {"name": "Turbo", "body": "SUV", "engine": "Electric Dual Motor", "hp": 630, "torque": 738, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 5104}
+        ]
+      }
+    }
+  },
+  "Kia": {
+    "Telluride": {
+      "2022-2025": {
+        "trims": [
+          {"name": "LX", "body": "SUV", "engine": "3.8L V6", "hp": 291, "torque": 262, "drivetrain": "FWD", "transmission": "8AT", "weight": 4112},
+          {"name": "S", "body": "SUV", "engine": "3.8L V6", "hp": 291, "torque": 262, "drivetrain": "AWD", "transmission": "8AT", "weight": 4272},
+          {"name": "EX", "body": "SUV", "engine": "3.8L V6", "hp": 291, "torque": 262, "drivetrain": "AWD", "transmission": "8AT", "weight": 4310},
+          {"name": "SX", "body": "SUV", "engine": "3.8L V6", "hp": 291, "torque": 262, "drivetrain": "AWD", "transmission": "8AT", "weight": 4376},
+          {"name": "SX Prestige", "body": "SUV", "engine": "3.8L V6", "hp": 291, "torque": 262, "drivetrain": "AWD", "transmission": "8AT", "weight": 4414},
+          {"name": "X-Pro", "body": "SUV", "engine": "3.8L V6", "hp": 291, "torque": 262, "drivetrain": "AWD", "transmission": "8AT", "weight": 4452}
+        ]
+      }
+    },
+    "Stinger": {
+      "2022-2023": {
+        "trims": [
+          {"name": "GT-Line", "body": "Sedan", "engine": "2.5L Turbo I4", "hp": 300, "torque": 311, "drivetrain": "RWD", "transmission": "8AT", "weight": 3657},
+          {"name": "GT1", "body": "Sedan", "engine": "3.3L Twin-Turbo V6", "hp": 368, "torque": 376, "drivetrain": "AWD", "transmission": "8AT", "weight": 3965},
+          {"name": "GT2", "body": "Sedan", "engine": "3.3L Twin-Turbo V6", "hp": 368, "torque": 376, "drivetrain": "AWD", "transmission": "8AT", "weight": 4015}
+        ]
+      }
+    },
+    "EV6": {
+      "2024-2025": {
+        "trims": [
+          {"name": "Light Long Range", "body": "SUV", "engine": "Single Motor Electric", "hp": 225, "torque": 258, "drivetrain": "RWD", "transmission": "1-Speed", "weight": 4236},
+          {"name": "Wind Long Range", "body": "SUV", "engine": "Dual Motor Electric", "hp": 320, "torque": 446, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 4502},
+          {"name": "GT-Line Long Range", "body": "SUV", "engine": "Dual Motor Electric", "hp": 320, "torque": 446, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 4519},
+          {"name": "GT", "body": "SUV", "engine": "Dual Motor Electric", "hp": 576, "torque": 546, "drivetrain": "AWD", "transmission": "1-Speed", "weight": 4707}
+        ]
+      }
+    }
+  }
+}
