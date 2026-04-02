@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { getPartImpacts, type PartImpact } from '../../data/corvette-part-impacts'
 import { getGeneration, type GenerationCode } from '../../data/corvette-generations'
-import { getSubComponents, type SubComponent, type SubComponentGroup } from '../../data/corvette-sub-components'
+import { getSubComponents, type SubComponent } from '../../data/corvette-sub-components'
 import type { PartSlug } from '../../types'
 import { MarketplaceSearch } from './MarketplaceSearch'
 
@@ -89,9 +89,7 @@ function RPGStatBar({
   const stockFraction = Math.min(Math.max(stockValue / barMax, 0), 1)
 
   // For the upgrade extension, figure out the fraction of change
-  const absDeltaMin = Math.abs(deltaMin)
   const absDeltaMax = Math.abs(deltaMax)
-  const upgradeFractionMin = absDeltaMin / barMax
   const upgradeFractionMax = absDeltaMax / barMax
 
   // Format the delta label
@@ -105,7 +103,6 @@ function RPGStatBar({
   // Stock fill = how much of the bar is filled
   // Upgrade extension = reduction shown as lighter region on the left edge of stock fill
   const stockPct = stockFraction * 100
-  const upgradeMinPct = upgradeFractionMin * 100
   const upgradeMaxPct = upgradeFractionMax * 100
 
   return (
@@ -468,7 +465,7 @@ export function PartsPanel({ generation, onTabChange }: PartsPanelProps) {
     onTabChange?.(slug)
   }
 
-  const parts = useMemo(() => getPartImpacts(generation), [generation])
+  const parts = useMemo(() => getPartImpacts(generation as GenerationCode), [generation])
 
   const activePart = useMemo(
     () => parts.find((p) => p.slug === activeTab) ?? parts[0],
