@@ -19,9 +19,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install gltf-transform CLI for Draco mesh compression
 RUN npm install -g @gltf-transform/cli 2>/dev/null || true
 
-# Install Python deps
+# Install Python deps (updated 2026-04-02)
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir firecrawl-py==4.21.0
 
 # Install Playwright Chromium browser
 RUN playwright install chromium
