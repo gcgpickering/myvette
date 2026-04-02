@@ -95,5 +95,15 @@ export async function analyzeUpgrade(
 
 export function createScrapeWebSocket(jobId: number): WebSocket {
   const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-  return new WebSocket(`${protocol}//${window.location.host}/ws/scrape/${jobId}`)
+  return new WebSocket(`${protocol}//${window.location.host}/api/ws/scrape/${jobId}`)
+}
+
+/** Convert snake_case keys to camelCase (matches Axios interceptor behavior). */
+export function snakeToCamel(obj: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = {}
+  for (const key of Object.keys(obj)) {
+    const camelKey = key.replace(/_([a-z])/g, (_, c) => c.toUpperCase())
+    result[camelKey] = obj[key]
+  }
+  return result
 }

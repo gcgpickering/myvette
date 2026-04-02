@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useMemo, useRef } from 'react'
 import { useMarketplaceStore } from '../../stores/marketplaceStore'
-import { getUpgradeCategories, startScrape, getScrapeResults, createScrapeWebSocket } from '../../api/marketplace'
+import { getUpgradeCategories, startScrape, getScrapeResults, createScrapeWebSocket, snakeToCamel } from '../../api/marketplace'
 import { FilterBar } from './FilterBar'
 import { ProductCard } from './ProductCard'
 import { PriceComparisonBar } from './PriceComparisonBar'
@@ -95,7 +95,9 @@ export function Marketplace({ vehicleId, partSlug, onClose }: MarketplaceProps) 
         try {
           const data = JSON.parse(event.data)
           if (data.type === 'results') {
-            const results = data.results as ScrapeResult[]
+            const results = (data.results as Record<string, unknown>[]).map(
+              (r) => snakeToCamel(r) as unknown as ScrapeResult
+            )
             store.addResults(results)
             results.forEach((r: ScrapeResult) => retailersFound.current.add(r.retailer ?? r.source))
           } else if (data.type === 'complete') {

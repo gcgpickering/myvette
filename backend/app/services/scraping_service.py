@@ -120,8 +120,9 @@ class ScrapingService:
             if settings.debug:
                 scrapers_to_run.append(MOCK_SCRAPER)
 
+            # Each scraper gets its own session — AsyncSession is not safe for concurrent use
             tasks = [
-                self._run_scraper(db, scraper, query, vehicle, job)
+                self._run_scraper_isolated(scraper, query, vehicle, job)
                 for scraper in scrapers_to_run
             ]
 
@@ -159,15 +160,14 @@ class ScrapingService:
                 len(scrapers_to_run),
             )
 
-    async def _run_scraper(
+    async def _run_scraper_isolated(
         self,
-        db: AsyncSession,
         scraper: BaseScraper,
         query: str,
         vehicle: Vehicle,
         job: ScrapeJob,
     ) -> list[ScrapedProduct]:
-        """Run a single scraper, store results in the DB, and return products."""
+        """Run a single scraper with its own DB session to avoid concurrent session issues."""
         try:
             products = await scraper.search(
                 query=query,
@@ -188,26 +188,27 @@ class ScrapingService:
 
         expires_at = datetime.now(timezone.utc) + timedelta(hours=settings.scrape_cache_ttl_hours)
 
-        for product in products:
-            result = ScrapeResult(
-                vehicle_id=job.vehicle_id,
-                upgrade_category_id=job.upgrade_category_id,
-                retailer=product.retailer,
-                product_name=product.product_name,
-                price=product.price,
-                currency=product.currency,
-                rating=product.rating,
-                review_count=product.review_count,
-                image_url=product.image_url,
-                product_url=product.product_url,
-                seller_name=product.seller_name,
-                shipping_estimate=product.shipping_estimate,
-                fitment_confidence=product.fitment_confidence,
-                expires_at=expires_at,
-            )
-            db.add(result)
+        async with async_session() as db:
+            for product in products:
+                result = ScrapeResult(
+                    vehicle_id=job.vehicle_id,
+                    upgrade_category_id=job.upgrade_category_id,
+                    retailer=product.retailer,
+                    product_name=product.product_name,
+                    price=product.price,
+                    currency=product.currency,
+                    rating=product.rating,
+                    review_count=product.review_count,
+                    image_url=product.image_url,
+                    product_url=product.product_url,
+                    seller_name=product.seller_name,
+                    shipping_estimate=product.shipping_estimate,
+                    fitment_confidence=product.fitment_confidence,
+                    expires_at=expires_at,
+                )
+                db.add(result)
 
-        await db.commit()
+            await db.commit()
         return products
 
 
