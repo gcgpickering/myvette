@@ -54,9 +54,10 @@ export async function searchParts(
   generation?: string,
   category?: string,
   limit: number = 10,
+  competitive: boolean = true,
 ): Promise<PartSearchResult[]> {
   const { data } = await api.get<PartSearchResult[]>('/marketplace/search', {
-    params: { q: query, generation, category, limit },
+    params: { q: query, generation, category, limit, competitive },
   })
   return data
 }

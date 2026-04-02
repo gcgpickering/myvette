@@ -26,14 +26,23 @@ async def search_parts(
     generation: str = Query("", description="Corvette generation, e.g. c8"),
     category: str = Query("", description="Part category, e.g. engine"),
     limit: int = Query(10, ge=1, le=20, description="Max results"),
+    competitive: bool = Query(False, description="Enable multi-retailer competitive pricing"),
 ):
     """Search aftermarket Corvette parts via Firecrawl."""
-    results = await firecrawl_service.search_parts(
-        query=q,
-        generation=generation,
-        part_category=category,
-        limit=limit,
-    )
+    if competitive:
+        results = await firecrawl_service.search_parts_competitive(
+            query=q,
+            generation=generation,
+            part_category=category,
+            limit=limit,
+        )
+    else:
+        results = await firecrawl_service.search_parts(
+            query=q,
+            generation=generation,
+            part_category=category,
+            limit=limit,
+        )
     return results
 
 

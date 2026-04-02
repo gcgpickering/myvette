@@ -41,9 +41,169 @@ export interface MeshMapping {
 export type GenerationMeshMap = Record<string, MeshMapping>
 
 // ---------------------------------------------------------------------------
-// C3 (1969 Stingray) - Generic mesh names, use material heuristics fallback
+// C3 (1969 Stingray) - Mapped by node name + material heuristics
+// Node names are generic (Cylinder, Circle, Cube) but materials are descriptive.
 // ---------------------------------------------------------------------------
-const c3Map: GenerationMeshMap = {}
+const c3Map: GenerationMeshMap = {
+  // Body panels (CW-Paint-shiny material)
+  'Cylinder.007': {
+    zone: 'body',
+    clickable: true,
+    explodable: false,
+    colorable: true,
+    label: 'Body Panel',
+    xrayOpacity: 0.15,
+  },
+  'Cube.002': {
+    zone: 'body',
+    clickable: true,
+    explodable: false,
+    colorable: true,
+    label: 'Body Shell',
+    xrayOpacity: 0.15,
+  },
+  Circle: {
+    zone: 'body',
+    clickable: true,
+    explodable: false,
+    colorable: true,
+    label: 'Body',
+    xrayOpacity: 0.15,
+  },
+  // Chrome / trim (Material.001 - silver metallic)
+  'Cube.001': {
+    zone: 'chrome',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Chrome Trim',
+    xrayOpacity: 0.3,
+  },
+  // Glass (ekRealistic Glass PLANE material)
+  'Circle.006': {
+    zone: 'glass',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Windshield',
+    xrayOpacity: 0.4,
+  },
+  'Circle.007': {
+    zone: 'glass',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Rear Glass',
+    xrayOpacity: 0.4,
+  },
+  'Circle.008': {
+    zone: 'glass',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Side Glass',
+    xrayOpacity: 0.4,
+  },
+  // Wheels / Tires (rimOffRoad2 groups + Cw-Rubber material)
+  rimOffRoad2: {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Wheels',
+    explodeDirection: [1.5, 0, 0],
+    xrayOpacity: 0.25,
+  },
+  tireOffRoad: {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Tires',
+    explodeDirection: [1.5, 0, 0],
+    xrayOpacity: 0.25,
+  },
+  'Object_4': {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Tire',
+    explodeDirection: [1.5, 0, 0],
+    xrayOpacity: 0.25,
+  },
+  'Circle.001': {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Wheel',
+    explodeDirection: [1.5, 0, 0],
+    xrayOpacity: 0.25,
+  },
+  'Cylinder.005': {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Tire Rubber',
+    explodeDirection: [1.5, 0, 0],
+    xrayOpacity: 0.25,
+  },
+  'Cylinder.006': {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Tire Rubber',
+    explodeDirection: [-1.5, 0, 0],
+    xrayOpacity: 0.25,
+  },
+  // Engine / Base (baked texture mesh)
+  Base_low: {
+    zone: 'engine',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Engine Block',
+    explodeDirection: [0, 1.5, 0],
+    xrayOpacity: 0.3,
+  },
+  // Interior / Seat
+  Automotive_CarSeat: {
+    zone: 'interior',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Seat',
+    xrayOpacity: 0.3,
+  },
+  // Structural / other dark parts
+  Cylinder: {
+    zone: 'other',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Structure',
+    xrayOpacity: 0.2,
+  },
+  'Circle.003': {
+    zone: 'other',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Trim',
+    xrayOpacity: 0.2,
+  },
+  'Cylinder.003': {
+    zone: 'other',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Structure',
+    xrayOpacity: 0.2,
+  },
+}
 
 // ---------------------------------------------------------------------------
 // C4 (1990) - Excellent mesh names
@@ -247,9 +407,147 @@ const c4Map: GenerationMeshMap = {
 }
 
 // ---------------------------------------------------------------------------
-// C5 (1997) - Generic mesh names, use material heuristics fallback
+// C5 (1997) - Mapped by node name + material properties
+// Node names are Object_N; material properties distinguish zones:
+//   Mesh2Mtl (dark blue metallic) = body paint
+//   Mesh20Mtl (silver-grey high metallic) = chrome/wheels
+//   Mesh5Mtl (semi-transparent) = glass
+//   Mesh19Mtl/Mesh1Mtl/Part1Mtl (dark matte) = rubber/interior/undercarriage
 // ---------------------------------------------------------------------------
-const c5Map: GenerationMeshMap = {}
+const c5Map: GenerationMeshMap = {
+  // Body panels (Mesh2Mtl - dark blue metallic paint)
+  Object_13: {
+    zone: 'body',
+    clickable: true,
+    explodable: false,
+    colorable: true,
+    label: 'Body Left',
+    xrayOpacity: 0.15,
+  },
+  Object_14: {
+    zone: 'body',
+    clickable: true,
+    explodable: false,
+    colorable: true,
+    label: 'Body Right',
+    xrayOpacity: 0.15,
+  },
+  // Chrome / Wheels (Mesh20Mtl - silver-grey metallic)
+  Object_11: {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Wheel Left',
+    explodeDirection: [-1.5, 0, 0],
+    xrayOpacity: 0.25,
+  },
+  Object_12: {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Wheel Right',
+    explodeDirection: [1.5, 0, 0],
+    xrayOpacity: 0.25,
+  },
+  // Glass (Mesh5Mtl - semi-transparent alpha=0.553)
+  Object_5: {
+    zone: 'glass',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Glass',
+    xrayOpacity: 0.4,
+  },
+  // Interior / dark structural (Mesh19Mtl - very dark matte)
+  Object_9: {
+    zone: 'interior',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Interior',
+    xrayOpacity: 0.3,
+  },
+  // Rubber / tires (Mesh1Mtl - black matte)
+  Object_10: {
+    zone: 'wheels',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Tires',
+    explodeDirection: [1.5, 0, 0],
+    xrayOpacity: 0.2,
+  },
+  // Undercarriage (Part1Mtl - black matte)
+  Object_16: {
+    zone: 'undercarriage',
+    clickable: false,
+    explodable: false,
+    colorable: false,
+    label: 'Undercarriage',
+    xrayOpacity: 0.1,
+  },
+  // Textured body/detail panels
+  Object_2: {
+    zone: 'body',
+    clickable: true,
+    explodable: false,
+    colorable: true,
+    label: 'Front Detail',
+    xrayOpacity: 0.15,
+  },
+  Object_3: {
+    zone: 'lights',
+    clickable: true,
+    explodable: false,
+    colorable: false,
+    label: 'Lights',
+    xrayOpacity: 0.35,
+  },
+  Object_4: {
+    zone: 'body',
+    clickable: true,
+    explodable: false,
+    colorable: true,
+    label: 'Hood / Roof',
+    xrayOpacity: 0.15,
+  },
+  Object_6: {
+    zone: 'body',
+    clickable: true,
+    explodable: false,
+    colorable: true,
+    label: 'Rear Panel',
+    xrayOpacity: 0.15,
+  },
+  Object_7: {
+    zone: 'body',
+    clickable: true,
+    explodable: false,
+    colorable: true,
+    label: 'Lower Body',
+    xrayOpacity: 0.15,
+  },
+  Object_8: {
+    zone: 'exhaust',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Exhaust',
+    explodeDirection: [0, 0, -1.5],
+    xrayOpacity: 0.3,
+  },
+  Object_15: {
+    zone: 'engine',
+    clickable: true,
+    explodable: true,
+    colorable: false,
+    label: 'Engine Bay',
+    explodeDirection: [0, 1.5, 0],
+    xrayOpacity: 0.3,
+  },
+}
 
 // ---------------------------------------------------------------------------
 // C6 ZR1 (2009) - Excellent names with RLA_C6_ prefix

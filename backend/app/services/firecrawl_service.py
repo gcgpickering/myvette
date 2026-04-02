@@ -1,6 +1,7 @@
 """Firecrawl-powered aftermarket parts search service."""
 
 import logging
+import re
 from typing import Any
 
 from firecrawl import FirecrawlApp
@@ -8,6 +9,38 @@ from firecrawl import FirecrawlApp
 from app.config import settings
 
 logger = logging.getLogger(__name__)
+
+# Regex patterns for extracting prices from text
+_PRICE_PATTERNS = [
+    re.compile(r'\$\s?([\d,]+\.?\d{0,2})'),           # $1,234.56 or $99
+    re.compile(r'(?:USD|Price:?)\s*\$?([\d,]+\.?\d{0,2})', re.I),
+    re.compile(r'(?:from|starting at|only)\s+\$?([\d,]+\.?\d{0,2})', re.I),
+]
+
+
+def _extract_price(text: str) -> float | None:
+    """Try to pull a USD price from a text string."""
+    for pat in _PRICE_PATTERNS:
+        m = pat.search(text)
+        if m:
+            try:
+                return float(m.group(1).replace(",", ""))
+            except ValueError:
+                continue
+    return None
+
+
+# Key Corvette aftermarket retailers for competitive pricing
+CORVETTE_RETAILERS = [
+    {"name": "Summit Racing", "domain": "summitracing.com"},
+    {"name": "Corvette Central", "domain": "corvettecentral.com"},
+    {"name": "Paragon Corvette", "domain": "parfrp.com"},
+    {"name": "Zip Corvette", "domain": "zip-corvette.com"},
+    {"name": "Mid America Motorworks", "domain": "mamotorworks.com"},
+    {"name": "eBay Motors", "domain": "ebay.com"},
+    {"name": "Amazon", "domain": "amazon.com"},
+    {"name": "CARiD", "domain": "carid.com"},
+]
 
 
 class FirecrawlService:
@@ -21,6 +54,57 @@ class FirecrawlService:
         if self._app is None:
             self._app = FirecrawlApp(api_key=settings.firecrawl_api_key)
         return self._app
+
+    async def search_parts_competitive(
+        self,
+        query: str,
+        generation: str = "",
+        part_category: str = "",
+        limit: int = 16,
+    ) -> list[dict[str, Any]]:
+        """Search multiple Corvette retailers for price comparison.
+
+        Uses site:-scoped queries to get results from specific retailers,
+        then merges with a general search for broader coverage.
+        """
+        if not settings.firecrawl_api_key:
+            logger.warning("FIRECRAWL_API_KEY is not set; skipping search")
+            return []
+
+        base_parts = ["corvette"]
+        if generation:
+            base_parts.append(generation)
+        base_parts.append(query)
+        if part_category and part_category.lower() not in query.lower():
+            base_parts.append(part_category)
+        base_query = " ".join(base_parts)
+
+        # Build a site-scoped query targeting top retailers
+        retailer_domains = " OR ".join(
+            f"site:{r['domain']}" for r in CORVETTE_RETAILERS
+        )
+        scoped_query = f"{base_query} buy price ({retailer_domains})"
+
+        all_results: list[dict[str, Any]] = []
+
+        try:
+            logger.info("Firecrawl competitive search: %s (limit=%d)", scoped_query, limit)
+            raw = self.app.search(scoped_query, limit=limit)
+            all_results.extend(self._parse_results(raw))
+        except Exception:
+            logger.exception("Firecrawl competitive search failed: %s", scoped_query)
+
+        # Deduplicate by URL
+        seen_urls: set[str] = set()
+        deduped: list[dict[str, Any]] = []
+        for r in all_results:
+            if r["url"] not in seen_urls:
+                seen_urls.add(r["url"])
+                deduped.append(r)
+
+        # Sort: items with prices first, then by price ascending
+        deduped.sort(key=lambda x: (x["price"] is None, x["price"] or 0))
+        return deduped
 
     async def search_parts(
         self,
@@ -82,23 +166,43 @@ class FirecrawlService:
 
         for item in items:
             if isinstance(item, dict):
+                name = item.get("title") or item.get("name") or ""
+                desc = item.get("description") or item.get("snippet") or ""
+                url = item.get("url") or item.get("link") or ""
+                metadata = item.get("metadata") or {}
                 entry = {
-                    "name": item.get("title") or item.get("name") or "",
-                    "price": item.get("price"),
-                    "url": item.get("url") or item.get("link") or "",
-                    "source": _extract_domain(item.get("url") or item.get("link") or ""),
-                    "description": item.get("description") or item.get("snippet") or "",
-                    "image_url": item.get("image_url") or item.get("image") or None,
+                    "name": name,
+                    "price": item.get("price") or _extract_price(f"{name} {desc}"),
+                    "url": url,
+                    "source": _extract_domain(url),
+                    "description": desc,
+                    "image_url": (
+                        item.get("image_url")
+                        or item.get("image")
+                        or metadata.get("og:image")
+                        or metadata.get("ogImage")
+                        or None
+                    ),
                 }
             elif hasattr(item, "url"):
                 # SDK object with attributes
+                name = getattr(item, "title", "") or getattr(item, "name", "") or ""
+                desc = getattr(item, "description", "") or getattr(item, "snippet", "") or ""
+                url = getattr(item, "url", "") or ""
+                metadata = getattr(item, "metadata", {}) or {}
                 entry = {
-                    "name": getattr(item, "title", "") or getattr(item, "name", "") or "",
-                    "price": getattr(item, "price", None),
-                    "url": getattr(item, "url", "") or "",
-                    "source": _extract_domain(getattr(item, "url", "") or ""),
-                    "description": getattr(item, "description", "") or getattr(item, "snippet", "") or "",
-                    "image_url": getattr(item, "image_url", None) or getattr(item, "image", None),
+                    "name": name,
+                    "price": getattr(item, "price", None) or _extract_price(f"{name} {desc}"),
+                    "url": url,
+                    "source": _extract_domain(url),
+                    "description": desc,
+                    "image_url": (
+                        getattr(item, "image_url", None)
+                        or getattr(item, "image", None)
+                        or (metadata.get("og:image") if isinstance(metadata, dict) else None)
+                        or (metadata.get("ogImage") if isinstance(metadata, dict) else None)
+                        or None
+                    ),
                 }
             else:
                 continue
