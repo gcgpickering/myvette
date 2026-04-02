@@ -24,7 +24,9 @@ export interface Generation {
   heritage: string
 }
 
-const MODEL_BASE = '/static/models/corvette'
+const MODEL_BASE = import.meta.env.PROD
+  ? 'https://pub-6f765b566e324f15bd5134e7598e4824.r2.dev'
+  : '/static/models/corvette'
 
 export const GENERATIONS: Generation[] = [
   {
