@@ -127,6 +127,51 @@ class FirecrawlService:
             self._app = FirecrawlApp(api_key=settings.firecrawl_api_key)
         return self._app
 
+    async def _enrich_images(self, results: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        """Scrape individual URLs to extract og:image for results missing images."""
+        import asyncio
+        import concurrent.futures
+
+        needs_image = [r for r in results if not r.get("image_url") and r.get("url")]
+        if not needs_image:
+            return results
+
+        def _scrape_og_image(url: str) -> str | None:
+            try:
+                data = self.app.scrape_url(url, formats=["markdown"])
+                metadata = {}
+                if hasattr(data, "metadata"):
+                    metadata = data.metadata if isinstance(data.metadata, dict) else {}
+                elif isinstance(data, dict):
+                    metadata = data.get("metadata", {})
+                return (
+                    metadata.get("og:image")
+                    or metadata.get("ogImage")
+                    or metadata.get("og_image")
+                    or _extract_image_from_content(
+                        getattr(data, "markdown", None)
+                        or (data.get("markdown") if isinstance(data, dict) else "")
+                        or ""
+                    )
+                )
+            except Exception:
+                logger.debug("Failed to scrape og:image from %s", url)
+                return None
+
+        loop = asyncio.get_event_loop()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
+            tasks = [
+                loop.run_in_executor(pool, _scrape_og_image, r["url"])
+                for r in needs_image
+            ]
+            images = await asyncio.gather(*tasks)
+
+        for r, img in zip(needs_image, images):
+            if img:
+                r["image_url"] = img
+
+        return results
+
     async def search_parts_competitive(
         self,
         query: str,
@@ -160,20 +205,11 @@ class FirecrawlService:
         all_results: list[dict[str, Any]] = []
 
         try:
-            logger.info("Firecrawl competitive search (with scrape): %s (limit=%d)", scoped_query, limit)
-            raw = self.app.search(
-                scoped_query,
-                limit=limit,
-                scrape_options={"formats": ["markdown"]},
-            )
+            logger.info("Firecrawl competitive search: %s (limit=%d)", scoped_query, limit)
+            raw = self.app.search(scoped_query, limit=limit)
             all_results.extend(self._parse_results(raw))
         except Exception:
-            logger.warning("Firecrawl scrape-search failed, retrying without scrape_options")
-            try:
-                raw = self.app.search(scoped_query, limit=limit)
-                all_results.extend(self._parse_results(raw))
-            except Exception:
-                logger.exception("Firecrawl competitive search failed: %s", scoped_query)
+            logger.exception("Firecrawl competitive search failed: %s", scoped_query)
 
         # Deduplicate by URL
         seen_urls: set[str] = set()
@@ -185,6 +221,9 @@ class FirecrawlService:
 
         # Sort: items with prices first, then by price ascending
         deduped.sort(key=lambda x: (x["price"] is None, x["price"] or 0))
+
+        # Enrich missing images by scraping individual product pages
+        deduped = await self._enrich_images(deduped)
         return deduped
 
     async def search_parts(
@@ -221,21 +260,16 @@ class FirecrawlService:
         search_query = " ".join(parts)
 
         try:
-            logger.info("Firecrawl search (with scrape): %s (limit=%d)", search_query, limit)
-            result = self.app.search(
-                search_query,
-                limit=limit,
-                scrape_options={"formats": ["markdown"]},
-            )
-            return self._parse_results(result)
+            logger.info("Firecrawl search: %s (limit=%d)", search_query, limit)
+            result = self.app.search(search_query, limit=limit)
+            parsed = self._parse_results(result)
+
+            # Enrich missing images by scraping individual product pages
+            parsed = await self._enrich_images(parsed)
+            return parsed
         except Exception:
-            logger.warning("Firecrawl scrape-search failed, retrying without scrape_options")
-            try:
-                result = self.app.search(search_query, limit=limit)
-                return self._parse_results(result)
-            except Exception:
-                logger.exception("Firecrawl search failed for query: %s", search_query)
-                return []
+            logger.exception("Firecrawl search failed for query: %s", search_query)
+            return []
 
     @staticmethod
     def _parse_results(raw: Any) -> list[dict[str, Any]]:
