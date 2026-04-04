@@ -203,26 +203,21 @@ class FirecrawlService:
         base_parts.append(query)
         if part_category and part_category.lower() not in query.lower():
             base_parts.append(part_category)
-        base_query = " ".join(base_parts)
-
-        # Build a site-scoped query targeting top retailers
-        retailer_domains = " OR ".join(
-            f"site:{r['domain']}" for r in CORVETTE_RETAILERS
-        )
-        scoped_query = f"{base_query} buy price ({retailer_domains})"
+        base_parts.append("buy price upgrade")
+        search_query = " ".join(base_parts)
 
         all_results: list[dict[str, Any]] = []
 
         try:
-            logger.info("Firecrawl competitive search: %s (limit=%d)", scoped_query, limit)
-            all_results = await self._search_with_scrape(scoped_query, limit)
+            logger.info("Firecrawl competitive search: %s (limit=%d)", search_query, limit)
+            all_results = await self._search_with_scrape(search_query, limit)
         except Exception:
             logger.warning("REST search with scrape failed, falling back to SDK")
             try:
-                raw = self.app.search(scoped_query, limit=limit)
+                raw = self.app.search(search_query, limit=limit)
                 all_results = self._parse_results(raw)
             except Exception:
-                logger.exception("Firecrawl competitive search failed: %s", scoped_query)
+                logger.exception("Firecrawl competitive search failed: %s", search_query)
 
         # Deduplicate by URL
         seen_urls: set[str] = set()
