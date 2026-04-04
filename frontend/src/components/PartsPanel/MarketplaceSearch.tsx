@@ -900,7 +900,7 @@ export function MarketplaceSearch({ partName, partSlug, generation }: Marketplac
           FIND UPGRADES
         </h4>
         {hasSearched && !loading && (() => {
-          const displayResults = results.filter((r) => r.imageUrl && r.price != null)
+          const displayResults = results.filter((r) => r.price != null)
           const sources = new Set(displayResults.map(r => r.source).filter(Boolean))
           return (
             <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -1048,7 +1048,7 @@ export function MarketplaceSearch({ partName, partSlug, generation }: Marketplac
 
         {!loading &&
           results
-            .filter((r) => r.imageUrl && r.price != null)
+            .filter((r) => r.price != null)
             .map((r, i) => (
               <ProductCard
                 key={`${r.url}-${i}`}

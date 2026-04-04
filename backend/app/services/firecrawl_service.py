@@ -30,9 +30,14 @@ def _extract_price(text: str) -> float | None:
     return None
 
 
+# Regex to extract the first image URL from markdown content
+_MD_IMAGE_RE = re.compile(r'!\[.*?\]\((https?://[^\s)]+\.(?:jpg|jpeg|png|webp|gif)(?:\?[^\s)]*)?)\)', re.I)
+_HTML_IMG_RE = re.compile(r'<img[^>]+src=["\']?(https?://[^\s"\'>\)]+\.(?:jpg|jpeg|png|webp|gif)(?:\?[^\s"\'>\)]*)?)', re.I)
+
+
 def _extract_image(item: dict, metadata: dict) -> str | None:
     """Extract image URL from a dict-based Firecrawl result."""
-    return (
+    img = (
         item.get("image_url")
         or item.get("image")
         or item.get("thumbnail")
@@ -40,8 +45,11 @@ def _extract_image(item: dict, metadata: dict) -> str | None:
         or metadata.get("ogImage")
         or metadata.get("og_image")
         or metadata.get("image")
-        or None
     )
+    if img:
+        return img
+    # Fallback: extract first image from scraped markdown/html content
+    return _extract_image_from_content(item.get("markdown") or item.get("html") or "")
 
 
 def _extract_image_from_obj(item: object, metadata: dict | object) -> str | None:
@@ -53,22 +61,45 @@ def _extract_image_from_obj(item: object, metadata: dict | object) -> str | None
     )
     if img:
         return img
-    # Try metadata dict keys
+    # Try metadata dict/object keys
     if isinstance(metadata, dict):
-        return (
+        img = (
             metadata.get("og:image")
             or metadata.get("ogImage")
             or metadata.get("og_image")
             or metadata.get("image")
-            or None
         )
-    # SDK metadata object with attributes
-    return (
-        getattr(metadata, "og_image", None)
-        or getattr(metadata, "ogImage", None)
-        or getattr(metadata, "image", None)
-        or None
-    )
+    else:
+        img = (
+            getattr(metadata, "og_image", None)
+            or getattr(metadata, "ogImage", None)
+            or getattr(metadata, "image", None)
+        )
+    if img:
+        return img
+    # Fallback: extract first image from scraped markdown/html content
+    content = getattr(item, "markdown", None) or getattr(item, "html", None) or ""
+    return _extract_image_from_content(content)
+
+
+def _extract_image_from_content(content: str) -> str | None:
+    """Pull the first product image URL from markdown or HTML content."""
+    if not content:
+        return None
+    # Try markdown image syntax first
+    m = _MD_IMAGE_RE.search(content)
+    if m:
+        url = m.group(1)
+        # Skip tiny icons, tracking pixels, SVGs in URL
+        if not any(skip in url.lower() for skip in ['icon', 'logo', '1x1', 'pixel', 'tracking', '.svg']):
+            return url
+    # Try HTML img src
+    m = _HTML_IMG_RE.search(content)
+    if m:
+        url = m.group(1)
+        if not any(skip in url.lower() for skip in ['icon', 'logo', '1x1', 'pixel', 'tracking', '.svg']):
+            return url
+    return None
 
 
 # Key Corvette aftermarket retailers for competitive pricing
@@ -150,14 +181,13 @@ class FirecrawlService:
                 seen_urls.add(r["url"])
                 deduped.append(r)
 
-        # Only keep results that have both an image and a price
-        with_image_and_price = [
-            r for r in deduped if r.get("image_url") and r.get("price") is not None
-        ]
-
-        # Sort by price ascending
-        with_image_and_price.sort(key=lambda x: x["price"] or 0)
-        return with_image_and_price[:limit]
+        # Require price; prefer results with images (sort them first)
+        with_price = [r for r in deduped if r.get("price") is not None]
+        with_price.sort(key=lambda x: (
+            0 if x.get("image_url") else 1,  # images first
+            x["price"] or 0,
+        ))
+        return with_price[:limit]
 
     async def search_parts(
         self,
@@ -205,12 +235,13 @@ class FirecrawlService:
 
             parsed = self._parse_results(result)
 
-            # Only keep results that have both an image and a price
-            with_image_and_price = [
-                r for r in parsed if r.get("image_url") and r.get("price") is not None
-            ]
-            with_image_and_price.sort(key=lambda x: x["price"] or 0)
-            return with_image_and_price[:limit]
+            # Require price; prefer results with images (sort them first)
+            with_price = [r for r in parsed if r.get("price") is not None]
+            with_price.sort(key=lambda x: (
+                0 if x.get("image_url") else 1,  # images first
+                x["price"] or 0,
+            ))
+            return with_price[:limit]
         except Exception:
             logger.exception("Firecrawl search failed for query: %s", search_query)
             return []
