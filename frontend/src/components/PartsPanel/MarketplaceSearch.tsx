@@ -404,13 +404,24 @@ function ProductCard({
   }
 
   const faviconUrl = result.source
-    ? `https://www.google.com/s2/favicons?domain=${result.source}&sz=32`
+    ? `https://www.google.com/s2/favicons?domain=${result.source}&sz=64`
     : null
+
+  // Part category icons for placeholder
+  const categoryIcons: Record<string, string> = {
+    engine: '\u2699', exhaust: '\u2B24', 'air-intake': '\u25B2',
+    brakes: '\u25C9', suspension: '\u25C6', 'tires-wheels': '\u25CB',
+    transmission: '\u2B23', 'turbo-supercharger': '\u27B0',
+    'ecu-electronics': '\u26A1', 'fuel-system': '\u2B22',
+    'cooling-system': '\u2744', steering: '\u21BA',
+    'body-shell': '\u25AD', interior: '\u2B1C', lights: '\u2600', glass: '\u25C7',
+  }
+  const partIcon = categoryIcons[partSlug] || '\u2699'
 
   return (
     <div
       style={{
-        perspective: '800px',
+        perspective: '1000px',
         height: 280,
         animation: `hudCardFadeIn 0.4s cubic-bezier(0.16,1,0.3,1) ${delay}s both`,
       }}
@@ -422,7 +433,7 @@ function ProductCard({
           width: '100%',
           height: '100%',
           transformStyle: 'preserve-3d',
-          transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
           transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
         }}
         onMouseEnter={() => !flipped && setHovered(true)}
@@ -435,30 +446,42 @@ function ProductCard({
             inset: 0,
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
-            transform: 'translateZ(0)',
-            borderRadius: 12,
+            transform: hovered ? 'translateZ(0) translateY(-4px)' : 'translateZ(0)',
+            borderRadius: 14,
             overflow: 'hidden',
             background: hovered
-              ? 'rgba(255,255,255,0.045)'
-              : 'rgba(255,255,255,0.02)',
-            border: `1px solid ${hovered ? 'rgba(196,30,42,0.45)' : 'rgba(255,255,255,0.05)'}`,
-            transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
+              ? 'linear-gradient(165deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 50%, rgba(196,30,42,0.04) 100%)'
+              : 'linear-gradient(165deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 50%, rgba(0,0,0,0.1) 100%)',
+            border: `1px solid ${hovered ? 'rgba(196,30,42,0.5)' : 'rgba(255,255,255,0.08)'}`,
+            transition: 'all 0.35s cubic-bezier(0.16,1,0.3,1)',
             boxShadow: hovered
-              ? '0 8px 32px rgba(196,30,42,0.12), 0 0 0 1px rgba(196,30,42,0.08), inset 0 1px 0 rgba(255,255,255,0.04)'
-              : '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.02)',
-            backdropFilter: 'blur(12px)',
+              ? '0 16px 48px rgba(0,0,0,0.5), 0 8px 24px rgba(196,30,42,0.15), 0 0 0 1px rgba(196,30,42,0.1), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.2)'
+              : '0 4px 16px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -1px 0 rgba(0,0,0,0.15)',
+            backdropFilter: 'blur(20px)',
             display: 'flex',
             flexDirection: 'column',
           }}
         >
+          {/* Glass highlight edge (top) */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: '5%',
+            right: '5%',
+            height: 1,
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)',
+            zIndex: 3,
+            pointerEvents: 'none',
+          }} />
+
           {/* Hover gradient sweep */}
           <div style={{
             position: 'absolute',
             inset: 0,
             background: hovered
-              ? 'linear-gradient(135deg, rgba(196,30,42,0.06) 0%, transparent 40%, rgba(196,30,42,0.03) 100%)'
+              ? 'linear-gradient(135deg, rgba(196,30,42,0.08) 0%, transparent 35%, rgba(255,255,255,0.02) 60%, rgba(196,30,42,0.04) 100%)'
               : 'none',
-            transition: 'background 0.3s ease',
+            transition: 'background 0.35s ease',
             pointerEvents: 'none',
             zIndex: 1,
           }} />
@@ -489,7 +512,7 @@ function ProductCard({
                     height: '100%',
                     objectFit: 'cover',
                     transition: 'transform 0.4s cubic-bezier(0.16,1,0.3,1)',
-                    transform: hovered ? 'scale(1.05)' : 'scale(1)',
+                    transform: hovered ? 'scale(1.08)' : 'scale(1)',
                   }}
                   onError={(e) => { e.currentTarget.style.display = 'none' }}
                 />
@@ -505,6 +528,7 @@ function ProductCard({
                 }} />
               </>
             ) : (
+              /* Branded placeholder — large retailer logo + part icon */
               <div style={{
                 width: '100%',
                 height: '100%',
@@ -512,25 +536,59 @@ function ProductCard({
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: 6,
+                gap: 8,
+                background: `radial-gradient(ellipse at 30% 20%, rgba(196,30,42,0.08) 0%, transparent 50%),
+                             radial-gradient(ellipse at 70% 80%, rgba(255,255,255,0.03) 0%, transparent 50%),
+                             linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.2) 100%)`,
+                position: 'relative',
               }}>
+                {/* Large part category icon */}
+                <div style={{
+                  fontSize: 28,
+                  opacity: 0.08,
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  pointerEvents: 'none',
+                }}>
+                  {partIcon}
+                </div>
+                {/* Retailer favicon (large) */}
                 {faviconUrl && (
                   <img
                     src={faviconUrl}
                     alt=""
-                    style={{ width: 24, height: 24, borderRadius: 6, opacity: 0.4, filter: 'grayscale(0.3)' }}
+                    style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 10,
+                      opacity: 0.6,
+                      filter: 'grayscale(0.2)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      background: 'rgba(255,255,255,0.05)',
+                      padding: 4,
+                    }}
                     onError={(e) => { e.currentTarget.style.display = 'none' }}
                   />
                 )}
                 <span style={{
-                  fontSize: 7,
-                  color: 'rgba(255,255,255,0.2)',
+                  fontSize: 8,
+                  color: 'rgba(255,255,255,0.3)',
                   fontFamily: "'DM Mono', monospace",
-                  letterSpacing: '0.05em',
+                  letterSpacing: '0.06em',
                   textTransform: 'uppercase',
+                  fontWeight: 600,
                 }}>
                   {result.source || 'Product'}
                 </span>
+                {/* Subtle scan lines */}
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.008) 3px, rgba(255,255,255,0.008) 4px)',
+                  pointerEvents: 'none',
+                }} />
               </div>
             )}
 
@@ -696,12 +754,12 @@ function ProductCard({
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
             transform: 'rotateY(180deg) translateZ(0)',
-            borderRadius: 12,
+            borderRadius: 14,
             overflow: 'hidden',
-            background: 'rgba(255,255,255,0.02)',
-            border: '1px solid rgba(196,30,42,0.3)',
-            boxShadow: '0 4px 24px rgba(196,30,42,0.1), inset 0 1px 0 rgba(255,255,255,0.03)',
-            backdropFilter: 'blur(12px)',
+            background: 'linear-gradient(165deg, rgba(196,30,42,0.06) 0%, rgba(255,255,255,0.02) 30%, rgba(0,0,0,0.3) 100%)',
+            border: '1px solid rgba(196,30,42,0.35)',
+            boxShadow: '0 12px 40px rgba(0,0,0,0.5), 0 4px 16px rgba(196,30,42,0.12), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.2)',
+            backdropFilter: 'blur(20px)',
           }}
         >
           {flipped && analyzing && !analysis ? (
