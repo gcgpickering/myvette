@@ -7,7 +7,7 @@ interface MarketplaceSearchProps {
   generation: string
 }
 
-/* ─── Animated stat bar for upgrade impact (RPG gauge aesthetic) ─── */
+/* ─── Compact impact bar for card-back analysis ─── */
 function ImpactBar({
   label,
   range,
@@ -15,6 +15,7 @@ function ImpactBar({
   color,
   accentGlow,
   isNegativeGood = false,
+  compact = false,
 }: {
   label: string
   range: [number, number]
@@ -22,6 +23,7 @@ function ImpactBar({
   color: string
   accentGlow: string
   isNegativeGood?: boolean
+  compact?: boolean
 }) {
   const avg = (range[0] + range[1]) / 2
   const isPositive = isNegativeGood ? avg < 0 : avg > 0
@@ -33,65 +35,55 @@ function ImpactBar({
   const fillColor = isPositive ? positiveColor : negativeColor
 
   return (
-    <div style={{ marginBottom: 8 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, marginBottom: 3 }}>
+    <div style={{ marginBottom: compact ? 3 : 8 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: compact ? 1 : 3 }}>
         <span style={{
           color: 'rgba(255,255,255,0.55)',
           fontFamily: "'DM Mono', monospace",
           textTransform: 'uppercase',
           letterSpacing: '0.04em',
-          fontSize: 9,
+          fontSize: compact ? 7 : 9,
         }}>{label}</span>
-        <span
-          style={{
-            color: fillColor,
-            fontFamily: "'DM Mono', monospace",
-            fontWeight: 700,
-            fontSize: 10,
-            textShadow: `0 0 8px ${fillColor}`,
-          }}
-        >
+        <span style={{
+          color: fillColor,
+          fontFamily: "'DM Mono', monospace",
+          fontWeight: 700,
+          fontSize: compact ? 7 : 10,
+          textShadow: `0 0 8px ${fillColor}`,
+        }}>
           {range[0] >= 0 ? '+' : ''}{range[0]} to {range[1] >= 0 ? '+' : ''}{range[1]} {unit}
         </span>
       </div>
-      <div
-        style={{
-          height: 5,
+      <div style={{
+        height: compact ? 3 : 5,
+        borderRadius: 3,
+        background: 'rgba(255,255,255,0.04)',
+        overflow: 'hidden',
+        position: 'relative',
+        boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)',
+      }}>
+        <div style={{
+          position: 'absolute',
+          inset: 0,
           borderRadius: 3,
-          background: 'rgba(255,255,255,0.04)',
-          overflow: 'hidden',
-          position: 'relative',
-          boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)',
-        }}
-      >
-        {/* Track glow */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            borderRadius: 3,
-            background: `linear-gradient(90deg, transparent, ${accentGlow}08)`,
-          }}
-        />
-        {/* Fill bar */}
-        <div
-          style={{
-            height: '100%',
-            width: `${barWidth}%`,
-            borderRadius: 3,
-            background: `linear-gradient(90deg, ${color}, ${fillColor})`,
-            boxShadow: `0 0 12px ${fillColor}, 0 0 4px ${fillColor}`,
-            animation: 'hudBarGrow 0.8s cubic-bezier(0.16,1,0.3,1) forwards',
-            transformOrigin: 'left',
-          }}
-        />
+          background: `linear-gradient(90deg, transparent, ${accentGlow}08)`,
+        }} />
+        <div style={{
+          height: '100%',
+          width: `${barWidth}%`,
+          borderRadius: 3,
+          background: `linear-gradient(90deg, ${color}, ${fillColor})`,
+          boxShadow: `0 0 12px ${fillColor}, 0 0 4px ${fillColor}`,
+          animation: 'hudBarGrow 0.8s cubic-bezier(0.16,1,0.3,1) forwards',
+          transformOrigin: 'left',
+        }} />
       </div>
     </div>
   )
 }
 
-/* ─── Analysis panel (cockpit readout style) ─── */
-function AnalysisPanel({ analysis }: { analysis: UpgradeAnalysis }) {
+/* ─── Compact analysis for card back ─── */
+function CardBackAnalysis({ analysis, onBack }: { analysis: UpgradeAnalysis; onBack: () => void }) {
   const confidenceColors: Record<string, string> = {
     high: 'rgba(34,197,94,0.95)',
     medium: 'rgba(245,197,24,0.95)',
@@ -105,195 +97,232 @@ function AnalysisPanel({ analysis }: { analysis: UpgradeAnalysis }) {
   }
 
   return (
-    <div
-      style={{
-        padding: '14px 16px',
-        background: 'linear-gradient(180deg, rgba(196,30,42,0.04) 0%, rgba(0,0,0,0.4) 100%)',
-        borderTop: '1px solid rgba(196,30,42,0.15)',
-        backdropFilter: 'blur(8px)',
-        animation: 'hudSlideDown 0.4s cubic-bezier(0.16,1,0.3,1)',
-      }}
-    >
-      {/* Summary */}
-      <p
-        style={{
-          margin: '0 0 12px 0',
-          fontSize: 11,
-          color: 'rgba(255,255,255,0.85)',
-          lineHeight: 1.6,
+    <div style={{
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '8px 10px',
+      background: 'linear-gradient(180deg, rgba(196,30,42,0.06) 0%, rgba(0,0,0,0.5) 100%)',
+      overflow: 'hidden',
+    }}>
+      {/* Header */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 6,
+        paddingBottom: 5,
+        borderBottom: '1px solid rgba(196,30,42,0.2)',
+      }}>
+        <span style={{
+          fontSize: 8,
           fontFamily: "'DM Mono', monospace",
-          borderLeft: '2px solid rgba(196,30,42,0.5)',
-          paddingLeft: 10,
-        }}
-      >
+          fontWeight: 700,
+          letterSpacing: '0.1em',
+          color: 'rgba(196,30,42,0.9)',
+          textShadow: '0 0 8px rgba(196,30,42,0.3)',
+        }}>
+          ANALYSIS
+        </span>
+        <button
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); onBack() }}
+          style={{
+            background: 'rgba(255,255,255,0.05)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            borderRadius: 4,
+            padding: '2px 6px',
+            fontSize: 7,
+            fontFamily: "'DM Mono', monospace",
+            fontWeight: 700,
+            color: 'rgba(255,255,255,0.5)',
+            cursor: 'pointer',
+            letterSpacing: '0.06em',
+            transition: 'all 0.2s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = 'rgba(255,255,255,0.9)'
+            e.currentTarget.style.borderColor = 'rgba(196,30,42,0.5)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = 'rgba(255,255,255,0.5)'
+            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
+          }}
+        >
+          BACK
+        </button>
+      </div>
+
+      {/* Summary */}
+      <p style={{
+        margin: '0 0 6px 0',
+        fontSize: 8,
+        color: 'rgba(255,255,255,0.75)',
+        lineHeight: 1.5,
+        fontFamily: "'DM Mono', monospace",
+        borderLeft: '2px solid rgba(196,30,42,0.4)',
+        paddingLeft: 6,
+        overflow: 'hidden',
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
+      }}>
         {analysis.summary}
       </p>
 
       {/* Impact bars */}
-      <ImpactBar label="Horsepower" range={analysis.estimatedHpGain} unit="HP" color="rgba(196,30,42,0.6)" accentGlow="rgba(196,30,42,1)" />
-      <ImpactBar label="Torque" range={analysis.estimatedTorqueGain} unit="lb-ft" color="rgba(255,140,50,0.5)" accentGlow="rgba(255,140,50,1)" />
-      <ImpactBar
-        label="Weight"
-        range={analysis.estimatedWeightChange}
-        unit="lbs"
-        color="rgba(100,150,255,0.5)"
-        accentGlow="rgba(100,150,255,1)"
-        isNegativeGood
-      />
-      <ImpactBar
-        label="0-60 Time"
-        range={analysis.estimatedZeroToSixtyChange}
-        unit="s"
-        color="rgba(245,197,24,0.5)"
-        accentGlow="rgba(245,197,24,1)"
-        isNegativeGood
-      />
+      <div style={{ marginBottom: 4 }}>
+        <ImpactBar compact label="HP" range={analysis.estimatedHpGain} unit="HP" color="rgba(196,30,42,0.6)" accentGlow="rgba(196,30,42,1)" />
+        <ImpactBar compact label="Torque" range={analysis.estimatedTorqueGain} unit="ft-lb" color="rgba(255,140,50,0.5)" accentGlow="rgba(255,140,50,1)" />
+        <ImpactBar compact label="Weight" range={analysis.estimatedWeightChange} unit="lbs" color="rgba(100,150,255,0.5)" accentGlow="rgba(100,150,255,1)" isNegativeGood />
+        <ImpactBar compact label="0-60" range={analysis.estimatedZeroToSixtyChange} unit="s" color="rgba(245,197,24,0.5)" accentGlow="rgba(245,197,24,1)" isNegativeGood />
+      </div>
 
-      {/* Badges row */}
-      <div style={{ display: 'flex', gap: 6, marginTop: 12, flexWrap: 'wrap' }}>
+      {/* Badges */}
+      <div style={{ display: 'flex', gap: 4, marginBottom: 5, flexWrap: 'wrap' }}>
         {[
-          { label: `${analysis.confidence.toUpperCase()} CONFIDENCE`, color: confidenceColors[analysis.confidence] },
+          { label: analysis.confidence.toUpperCase(), color: confidenceColors[analysis.confidence] },
           { label: analysis.difficulty.toUpperCase(), color: difficultyColors[analysis.difficulty] },
           { label: analysis.installTime, color: 'rgba(255,255,255,0.5)' },
         ].map((badge) => (
-          <span
-            key={badge.label}
-            style={{
-              fontSize: 8,
-              fontFamily: "'DM Mono', monospace",
-              fontWeight: 700,
-              letterSpacing: '0.06em',
-              padding: '3px 8px',
-              borderRadius: 8,
-              background: 'rgba(255,255,255,0.03)',
-              border: `1px solid ${badge.color}40`,
-              color: badge.color,
-              textShadow: `0 0 6px ${badge.color}40`,
-            }}
-          >
+          <span key={badge.label} style={{
+            fontSize: 6,
+            fontFamily: "'DM Mono', monospace",
+            fontWeight: 700,
+            letterSpacing: '0.06em',
+            padding: '2px 5px',
+            borderRadius: 4,
+            background: 'rgba(255,255,255,0.03)',
+            border: `1px solid ${badge.color}40`,
+            color: badge.color,
+          }}>
             {badge.label}
           </span>
         ))}
       </div>
 
-      {/* Pros / Cons */}
-      <div style={{ display: 'flex', gap: 14, marginTop: 12 }}>
+      {/* Pros / Cons stacked */}
+      <div style={{ flex: 1, overflow: 'hidden' }}>
         {analysis.pros.length > 0 && (
-          <div style={{ flex: 1 }}>
-            <div style={{
-              fontSize: 8,
+          <div style={{ marginBottom: 3 }}>
+            <span style={{
+              fontSize: 6,
               color: 'rgba(34,197,94,0.7)',
               fontWeight: 700,
-              marginBottom: 4,
               fontFamily: "'DM Mono', monospace",
               letterSpacing: '0.08em',
             }}>
-              ADVANTAGES
+              PROS
+            </span>
+            <div style={{
+              fontSize: 7,
+              color: 'rgba(255,255,255,0.55)',
+              lineHeight: 1.5,
+              fontFamily: "'DM Mono', monospace",
+              paddingLeft: 6,
+              borderLeft: '1px solid rgba(34,197,94,0.2)',
+              marginTop: 1,
+            }}>
+              {analysis.pros[0]}
+              {analysis.pros.length > 1 && (
+                <span style={{ color: 'rgba(255,255,255,0.25)', marginLeft: 4 }}>
+                  +{analysis.pros.length - 1} more
+                </span>
+              )}
             </div>
-            {analysis.pros.map((p, i) => (
-              <div key={i} style={{
-                fontSize: 10,
-                color: 'rgba(255,255,255,0.6)',
-                lineHeight: 1.7,
-                fontFamily: "'DM Mono', monospace",
-                paddingLeft: 8,
-                borderLeft: '1px solid rgba(34,197,94,0.2)',
-                marginBottom: 2,
-              }}>
-                {p}
-              </div>
-            ))}
           </div>
         )}
         {analysis.cons.length > 0 && (
-          <div style={{ flex: 1 }}>
-            <div style={{
-              fontSize: 8,
+          <div>
+            <span style={{
+              fontSize: 6,
               color: 'rgba(239,68,68,0.7)',
               fontWeight: 700,
-              marginBottom: 4,
               fontFamily: "'DM Mono', monospace",
               letterSpacing: '0.08em',
             }}>
-              TRADE-OFFS
+              CONS
+            </span>
+            <div style={{
+              fontSize: 7,
+              color: 'rgba(255,255,255,0.55)',
+              lineHeight: 1.5,
+              fontFamily: "'DM Mono', monospace",
+              paddingLeft: 6,
+              borderLeft: '1px solid rgba(239,68,68,0.2)',
+              marginTop: 1,
+            }}>
+              {analysis.cons[0]}
+              {analysis.cons.length > 1 && (
+                <span style={{ color: 'rgba(255,255,255,0.25)', marginLeft: 4 }}>
+                  +{analysis.cons.length - 1} more
+                </span>
+              )}
             </div>
-            {analysis.cons.map((c, i) => (
-              <div key={i} style={{
-                fontSize: 10,
-                color: 'rgba(255,255,255,0.6)',
-                lineHeight: 1.7,
-                fontFamily: "'DM Mono', monospace",
-                paddingLeft: 8,
-                borderLeft: '1px solid rgba(239,68,68,0.2)',
-                marginBottom: 2,
-              }}>
-                {c}
-              </div>
-            ))}
           </div>
         )}
       </div>
 
+      {/* Compatibility warning */}
       {analysis.compatibilityNotes && (
-        <div
-          style={{
-            marginTop: 10,
-            fontSize: 9,
-            color: 'rgba(245,197,24,0.7)',
-            fontFamily: "'DM Mono', monospace",
-            lineHeight: 1.5,
-            padding: '6px 8px',
-            background: 'rgba(245,197,24,0.04)',
-            borderRadius: 6,
-            border: '1px solid rgba(245,197,24,0.1)',
-          }}
-        >
-          ⚠ {analysis.compatibilityNotes}
+        <div style={{
+          marginTop: 4,
+          fontSize: 6,
+          color: 'rgba(245,197,24,0.7)',
+          fontFamily: "'DM Mono', monospace",
+          lineHeight: 1.4,
+          padding: '3px 5px',
+          background: 'rgba(245,197,24,0.04)',
+          borderRadius: 4,
+          border: '1px solid rgba(245,197,24,0.1)',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+        }}>
+          {analysis.compatibilityNotes}
         </div>
       )}
     </div>
   )
 }
 
-/* ─── Shimmer skeleton for loading states ─── */
+/* ─── Portrait shimmer skeleton ─── */
 function ShimmerCard({ index }: { index: number }) {
+  const row = Math.floor(index / 2)
+  const col = index % 2
+  const delay = row * 0.08 + col * 0.04
+
   return (
-    <div
-      style={{
-        borderRadius: 12,
-        overflow: 'hidden',
-        background: 'rgba(255,255,255,0.02)',
-        border: '1px solid rgba(255,255,255,0.04)',
-        padding: 14,
-        display: 'flex',
-        gap: 12,
-        animation: `hudCardFadeIn 0.3s ease-out ${index * 0.08}s both`,
-      }}
-    >
-      {/* Thumbnail shimmer */}
-      <div
-        style={{
-          width: 88,
-          height: 88,
-          borderRadius: 10,
-          background: 'linear-gradient(110deg, rgba(255,255,255,0.02) 30%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.02) 70%)',
-          backgroundSize: '200% 100%',
-          animation: 'hudShimmer 1.8s ease-in-out infinite',
-          flexShrink: 0,
-        }}
-      />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+    <div style={{
+      borderRadius: 12,
+      overflow: 'hidden',
+      background: 'rgba(255,255,255,0.02)',
+      border: '1px solid rgba(255,255,255,0.04)',
+      height: 280,
+      display: 'flex',
+      flexDirection: 'column',
+      animation: `hudCardFadeIn 0.3s ease-out ${delay}s both`,
+    }}>
+      {/* Image shimmer */}
+      <div style={{
+        width: '100%',
+        height: '60%',
+        background: 'linear-gradient(110deg, rgba(255,255,255,0.02) 30%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.02) 70%)',
+        backgroundSize: '200% 100%',
+        animation: 'hudShimmer 1.8s ease-in-out infinite',
+      }} />
+      {/* Details shimmer */}
+      <div style={{ padding: 10, flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
         <div style={{
-          height: 14,
-          borderRadius: 4,
-          width: '80%',
+          height: 10,
+          borderRadius: 3,
+          width: '85%',
           background: 'linear-gradient(110deg, rgba(255,255,255,0.03) 30%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 70%)',
           backgroundSize: '200% 100%',
           animation: 'hudShimmer 1.8s ease-in-out infinite',
           animationDelay: '0.1s',
         }} />
         <div style={{
-          height: 10,
+          height: 8,
           borderRadius: 3,
           width: '60%',
           background: 'linear-gradient(110deg, rgba(255,255,255,0.02) 30%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.02) 70%)',
@@ -302,21 +331,30 @@ function ShimmerCard({ index }: { index: number }) {
           animationDelay: '0.2s',
         }} />
         <div style={{
-          height: 18,
-          borderRadius: 4,
-          width: '35%',
+          height: 14,
+          borderRadius: 3,
+          width: '40%',
           marginTop: 'auto',
           background: 'linear-gradient(110deg, rgba(34,197,94,0.04) 30%, rgba(34,197,94,0.08) 50%, rgba(34,197,94,0.04) 70%)',
           backgroundSize: '200% 100%',
           animation: 'hudShimmer 1.8s ease-in-out infinite',
           animationDelay: '0.3s',
         }} />
+        <div style={{
+          height: 22,
+          borderRadius: 6,
+          width: '100%',
+          background: 'linear-gradient(110deg, rgba(196,30,42,0.03) 30%, rgba(196,30,42,0.06) 50%, rgba(196,30,42,0.03) 70%)',
+          backgroundSize: '200% 100%',
+          animation: 'hudShimmer 1.8s ease-in-out infinite',
+          animationDelay: '0.4s',
+        }} />
       </div>
     </div>
   )
 }
 
-/* ─── Product card (glass cockpit aesthetic) ─── */
+/* ─── Portrait product card with 3D flip ─── */
 function ProductCard({
   result,
   index,
@@ -331,19 +369,23 @@ function ProductCard({
   const [hovered, setHovered] = useState(false)
   const [analysis, setAnalysis] = useState<UpgradeAnalysis | null>(null)
   const [analyzing, setAnalyzing] = useState(false)
-  const [expanded, setExpanded] = useState(false)
+  const [flipped, setFlipped] = useState(false)
+
+  const row = Math.floor(index / 2)
+  const col = index % 2
+  const delay = row * 0.08 + col * 0.04
 
   const handleAnalyze = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
 
     if (analysis) {
-      setExpanded(!expanded)
+      setFlipped(true)
       return
     }
 
     setAnalyzing(true)
-    setExpanded(true)
+    setFlipped(true)
     try {
       const data = await analyzeUpgrade(
         generation,
@@ -355,7 +397,7 @@ function ProductCard({
       setAnalysis(data)
     } catch {
       setAnalysis(null)
-      setExpanded(false)
+      setFlipped(false)
     } finally {
       setAnalyzing(false)
     }
@@ -365,65 +407,76 @@ function ProductCard({
     ? `https://www.google.com/s2/favicons?domain=${result.source}&sz=32`
     : null
 
-  const hasImage = !!result.imageUrl
-
   return (
     <div
       style={{
-        borderRadius: 12,
-        overflow: 'hidden',
-        position: 'relative',
-        background: hovered
-          ? 'rgba(255,255,255,0.045)'
-          : 'rgba(255,255,255,0.02)',
-        border: `1px solid ${hovered ? 'rgba(196,30,42,0.45)' : 'rgba(255,255,255,0.05)'}`,
-        transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
-        transform: hovered ? 'translateY(-2px)' : 'translateY(0)',
-        boxShadow: hovered
-          ? '0 8px 32px rgba(196,30,42,0.12), 0 0 0 1px rgba(196,30,42,0.08), inset 0 1px 0 rgba(255,255,255,0.04)'
-          : '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.02)',
-        backdropFilter: 'blur(12px)',
-        animation: `hudCardFadeIn 0.4s cubic-bezier(0.16,1,0.3,1) ${index * 0.07}s both`,
+        perspective: '800px',
+        height: 280,
+        animation: `hudCardFadeIn 0.4s cubic-bezier(0.16,1,0.3,1) ${delay}s both`,
       }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
     >
-      {/* Hover gradient sweep overlay */}
+      {/* Card inner — rotates on flip */}
       <div
         style={{
-          position: 'absolute',
-          inset: 0,
-          background: hovered
-            ? 'linear-gradient(135deg, rgba(196,30,42,0.06) 0%, transparent 40%, rgba(196,30,42,0.03) 100%)'
-            : 'none',
-          transition: 'background 0.3s ease',
-          pointerEvents: 'none',
-          zIndex: 1,
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          transformStyle: 'preserve-3d',
+          transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
         }}
-      />
-
-      <a
-        href={result.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ textDecoration: 'none', display: 'block', color: 'inherit', position: 'relative', zIndex: 2 }}
+        onMouseEnter={() => !flipped && setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
-        <div style={{ display: 'flex', padding: 14, gap: 14 }}>
-          {/* Thumbnail */}
-          <div
+        {/* ═══ FRONT FACE ═══ */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            transform: 'translateZ(0)',
+            borderRadius: 12,
+            overflow: 'hidden',
+            background: hovered
+              ? 'rgba(255,255,255,0.045)'
+              : 'rgba(255,255,255,0.02)',
+            border: `1px solid ${hovered ? 'rgba(196,30,42,0.45)' : 'rgba(255,255,255,0.05)'}`,
+            transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
+            boxShadow: hovered
+              ? '0 8px 32px rgba(196,30,42,0.12), 0 0 0 1px rgba(196,30,42,0.08), inset 0 1px 0 rgba(255,255,255,0.04)'
+              : '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.02)',
+            backdropFilter: 'blur(12px)',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          {/* Hover gradient sweep */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: hovered
+              ? 'linear-gradient(135deg, rgba(196,30,42,0.06) 0%, transparent 40%, rgba(196,30,42,0.03) 100%)'
+              : 'none',
+            transition: 'background 0.3s ease',
+            pointerEvents: 'none',
+            zIndex: 1,
+          }} />
+
+          {/* Image area (60%) */}
+          <a
+            href={result.url}
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
-              width: hasImage ? 88 : 64,
-              height: hasImage ? 88 : 64,
-              borderRadius: 10,
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)',
-              border: '1px solid rgba(255,255,255,0.06)',
-              flexShrink: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              overflow: 'hidden',
+              display: 'block',
+              width: '100%',
+              height: '60%',
               position: 'relative',
-              transition: 'all 0.3s ease',
+              overflow: 'hidden',
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)',
+              flexShrink: 0,
+              zIndex: 2,
             }}
           >
             {result.imageUrl ? (
@@ -435,232 +488,270 @@ function ProductCard({
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover',
-                    borderRadius: 9,
                     transition: 'transform 0.4s cubic-bezier(0.16,1,0.3,1)',
                     transform: hovered ? 'scale(1.05)' : 'scale(1)',
                   }}
-                  onError={(e) => {
-                    const target = e.currentTarget
-                    target.style.display = 'none'
-                    if (target.nextElementSibling) {
-                      ;(target.nextElementSibling as HTMLElement).style.display = 'flex'
-                    }
-                  }}
+                  onError={(e) => { e.currentTarget.style.display = 'none' }}
                 />
-                {/* Image gradient overlay */}
+                {/* Bottom gradient overlay */}
                 <div style={{
                   position: 'absolute',
-                  inset: 0,
-                  borderRadius: 9,
-                  background: 'linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.4) 100%)',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: '40%',
+                  background: 'linear-gradient(180deg, transparent, rgba(0,0,0,0.6))',
                   pointerEvents: 'none',
                 }} />
               </>
-            ) : null}
-            <div
-              style={{
-                display: result.imageUrl ? 'none' : 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+            ) : (
+              <div style={{
                 width: '100%',
                 height: '100%',
+                display: 'flex',
                 flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
                 gap: 6,
-              }}
-            >
-              {faviconUrl && (
-                <img
-                  src={faviconUrl}
-                  alt=""
-                  style={{ width: 22, height: 22, borderRadius: 5, opacity: 0.5, filter: 'grayscale(0.3)' }}
-                  onError={(e) => { e.currentTarget.style.display = 'none' }}
-                />
-              )}
-              <span style={{
-                fontSize: 7,
-                color: 'rgba(255,255,255,0.2)',
-                fontFamily: "'DM Mono', monospace",
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase',
               }}>
-                {result.source || 'Product'}
-              </span>
-            </div>
-          </div>
-
-          {/* Details */}
-          <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-            {/* Title */}
-            <div
-              style={{
-                fontSize: 12,
-                fontWeight: 600,
-                color: hovered ? '#fff' : 'rgba(255,255,255,0.9)',
-                lineHeight: 1.4,
-                marginBottom: 4,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                transition: 'color 0.2s ease',
-              }}
-            >
-              {result.name || 'Untitled Product'}
-            </div>
-
-            {/* Description */}
-            {result.description && (
-              <div
-                style={{
-                  fontSize: 10,
-                  color: 'rgba(255,255,255,0.4)',
-                  lineHeight: 1.5,
-                  marginBottom: 8,
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical',
+                {faviconUrl && (
+                  <img
+                    src={faviconUrl}
+                    alt=""
+                    style={{ width: 24, height: 24, borderRadius: 6, opacity: 0.4, filter: 'grayscale(0.3)' }}
+                    onError={(e) => { e.currentTarget.style.display = 'none' }}
+                  />
+                )}
+                <span style={{
+                  fontSize: 7,
+                  color: 'rgba(255,255,255,0.2)',
                   fontFamily: "'DM Mono', monospace",
-                }}
-              >
-                {result.description}
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                }}>
+                  {result.source || 'Product'}
+                </span>
               </div>
             )}
 
-            {/* Price + Source row */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 'auto', flexWrap: 'wrap' }}>
-              {result.price != null && (
-                <span
-                  style={{
-                    fontSize: 15,
-                    fontWeight: 800,
-                    color: 'rgba(34,197,94,1)',
-                    fontFamily: "'DM Mono', monospace",
-                    textShadow: '0 0 16px rgba(34,197,94,0.35), 0 0 4px rgba(34,197,94,0.2)',
-                    letterSpacing: '-0.02em',
-                  }}
-                >
+            {/* External link icon overlay */}
+            <div style={{
+              position: 'absolute',
+              top: 6,
+              right: 6,
+              width: 20,
+              height: 20,
+              borderRadius: 5,
+              background: 'rgba(0,0,0,0.5)',
+              backdropFilter: 'blur(4px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'rgba(255,255,255,0.5)',
+              fontSize: 10,
+              transition: 'color 0.2s ease',
+              opacity: hovered ? 1 : 0,
+              zIndex: 3,
+            }}>
+              &#8599;
+            </div>
+          </a>
+
+          {/* Details area (40%) */}
+          <div style={{
+            flex: 1,
+            padding: '6px 10px 8px',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative',
+            zIndex: 2,
+            minHeight: 0,
+          }}>
+            {/* Product name */}
+            <div style={{
+              fontSize: 10,
+              fontWeight: 600,
+              color: hovered ? '#fff' : 'rgba(255,255,255,0.9)',
+              lineHeight: 1.35,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              transition: 'color 0.2s ease',
+              marginBottom: 3,
+            }}>
+              {result.name || 'Untitled Product'}
+            </div>
+
+            {/* Source badge */}
+            {result.source && (
+              <span style={{
+                fontSize: 7,
+                fontFamily: "'DM Mono', monospace",
+                fontWeight: 600,
+                letterSpacing: '0.04em',
+                padding: '1px 5px',
+                borderRadius: 4,
+                background: 'rgba(255,255,255,0.04)',
+                color: 'rgba(255,255,255,0.3)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 3,
+                alignSelf: 'flex-start',
+                marginBottom: 4,
+              }}>
+                {faviconUrl && (
+                  <img
+                    src={faviconUrl}
+                    alt=""
+                    style={{ width: 8, height: 8, borderRadius: 2, opacity: 0.5 }}
+                    onError={(e) => { e.currentTarget.style.display = 'none' }}
+                  />
+                )}
+                {result.source}
+              </span>
+            )}
+
+            {/* Price */}
+            <div style={{ marginTop: 'auto' }}>
+              {result.price != null ? (
+                <span style={{
+                  fontSize: 14,
+                  fontWeight: 800,
+                  color: 'rgba(34,197,94,1)',
+                  fontFamily: "'DM Mono', monospace",
+                  textShadow: '0 0 16px rgba(34,197,94,0.35), 0 0 4px rgba(34,197,94,0.2)',
+                  letterSpacing: '-0.02em',
+                }}>
                   ${typeof result.price === 'number' ? result.price.toFixed(2) : result.price}
                 </span>
-              )}
-              {result.source && (
-                <span
-                  style={{
-                    fontSize: 8,
-                    fontFamily: "'DM Mono', monospace",
-                    fontWeight: 600,
-                    letterSpacing: '0.04em',
-                    padding: '2px 7px',
-                    borderRadius: 6,
-                    background: 'rgba(255,255,255,0.04)',
-                    color: 'rgba(255,255,255,0.35)',
-                    border: '1px solid rgba(255,255,255,0.06)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 4,
-                  }}
-                >
-                  {faviconUrl && (
-                    <img
-                      src={faviconUrl}
-                      alt=""
-                      style={{ width: 10, height: 10, borderRadius: 2, opacity: 0.6 }}
-                      onError={(e) => { e.currentTarget.style.display = 'none' }}
-                    />
-                  )}
-                  {result.source}
+              ) : (
+                <span style={{
+                  fontSize: 9,
+                  color: 'rgba(255,255,255,0.25)',
+                  fontFamily: "'DM Mono', monospace",
+                }}>
+                  Price N/A
                 </span>
               )}
-              <span style={{
-                marginLeft: 'auto',
-                color: hovered ? 'rgba(196,30,42,0.7)' : 'rgba(255,255,255,0.2)',
-                fontSize: 14,
-                transition: 'color 0.2s ease',
-              }}>
-                &#8599;
-              </span>
             </div>
+
+            {/* Analyze button */}
+            <button
+              onClick={handleAnalyze}
+              disabled={analyzing}
+              style={{
+                width: '100%',
+                padding: '5px 0',
+                marginTop: 6,
+                borderRadius: 6,
+                border: '1px solid rgba(196,30,42,0.35)',
+                background: analysis
+                  ? 'linear-gradient(135deg, rgba(196,30,42,0.1) 0%, rgba(196,30,42,0.06) 100%)'
+                  : 'rgba(196,30,42,0.04)',
+                color: 'rgba(196,30,42,0.9)',
+                fontSize: 8,
+                fontWeight: 700,
+                fontFamily: "'DM Mono', monospace",
+                cursor: analyzing ? 'wait' : 'pointer',
+                transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
+                letterSpacing: '0.08em',
+                textShadow: '0 0 8px rgba(196,30,42,0.2)',
+              }}
+              onMouseEnter={(e) => {
+                if (!analyzing) {
+                  e.currentTarget.style.background = 'linear-gradient(135deg, rgba(196,30,42,0.18) 0%, rgba(196,30,42,0.1) 100%)'
+                  e.currentTarget.style.borderColor = 'rgba(196,30,42,0.6)'
+                  e.currentTarget.style.boxShadow = '0 0 16px rgba(196,30,42,0.15)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!analyzing) {
+                  e.currentTarget.style.background = analysis
+                    ? 'linear-gradient(135deg, rgba(196,30,42,0.1) 0%, rgba(196,30,42,0.06) 100%)'
+                    : 'rgba(196,30,42,0.04)'
+                  e.currentTarget.style.borderColor = 'rgba(196,30,42,0.35)'
+                  e.currentTarget.style.boxShadow = 'none'
+                }
+              }}
+            >
+              {analyzing ? (
+                <span style={{ animation: 'hudPulse 1.5s ease-in-out infinite' }}>ANALYZING...</span>
+              ) : analysis ? (
+                'VIEW ANALYSIS'
+              ) : (
+                'ANALYZE'
+              )}
+            </button>
           </div>
         </div>
-      </a>
 
-      {/* Analyze button */}
-      <div style={{ padding: '0 14px 12px 14px', position: 'relative', zIndex: 2 }}>
-        <button
-          onClick={handleAnalyze}
-          disabled={analyzing}
+        {/* ═══ BACK FACE ═══ */}
+        <div
           style={{
-            width: '100%',
-            padding: '7px 0',
-            borderRadius: 8,
-            border: `1px solid ${analyzing ? 'rgba(196,30,42,0.2)' : 'rgba(196,30,42,0.35)'}`,
-            background: analyzing
-              ? 'rgba(196,30,42,0.06)'
-              : analysis
-                ? 'linear-gradient(135deg, rgba(196,30,42,0.1) 0%, rgba(196,30,42,0.06) 100%)'
-                : 'rgba(196,30,42,0.04)',
-            color: analyzing ? 'rgba(196,30,42,0.5)' : 'rgba(196,30,42,0.9)',
-            fontSize: 9,
-            fontWeight: 700,
-            fontFamily: "'DM Mono', monospace",
-            cursor: analyzing ? 'wait' : 'pointer',
-            transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
-            letterSpacing: '0.08em',
-            textShadow: analyzing ? 'none' : '0 0 8px rgba(196,30,42,0.2)',
-          }}
-          onMouseEnter={(e) => {
-            if (!analyzing) {
-              e.currentTarget.style.background = 'linear-gradient(135deg, rgba(196,30,42,0.18) 0%, rgba(196,30,42,0.1) 100%)'
-              e.currentTarget.style.borderColor = 'rgba(196,30,42,0.6)'
-              e.currentTarget.style.boxShadow = '0 0 16px rgba(196,30,42,0.15)'
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!analyzing) {
-              e.currentTarget.style.background = analysis
-                ? 'linear-gradient(135deg, rgba(196,30,42,0.1) 0%, rgba(196,30,42,0.06) 100%)'
-                : 'rgba(196,30,42,0.04)'
-              e.currentTarget.style.borderColor = 'rgba(196,30,42,0.35)'
-              e.currentTarget.style.boxShadow = 'none'
-            }
+            position: 'absolute',
+            inset: 0,
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            transform: 'rotateY(180deg) translateZ(0)',
+            borderRadius: 12,
+            overflow: 'hidden',
+            background: 'rgba(255,255,255,0.02)',
+            border: '1px solid rgba(196,30,42,0.3)',
+            boxShadow: '0 4px 24px rgba(196,30,42,0.1), inset 0 1px 0 rgba(255,255,255,0.03)',
+            backdropFilter: 'blur(12px)',
           }}
         >
-          {analyzing ? (
-            <span style={{ animation: 'hudPulse 1.5s ease-in-out infinite' }}>
-              ANALYZING UPGRADE...
-            </span>
-          ) : analysis ? (
-            expanded ? '▲ HIDE ANALYSIS' : '▼ SHOW ANALYSIS'
-          ) : (
-            'ANALYZE UPGRADE ›'
-          )}
-        </button>
-      </div>
-
-      {/* Analysis panel */}
-      {expanded && analysis && <AnalysisPanel analysis={analysis} />}
-
-      {/* Analyzing skeleton */}
-      {expanded && analyzing && !analysis && (
-        <div style={{ padding: '16px 16px', borderTop: '1px solid rgba(196,30,42,0.15)' }}>
-          {[1, 2, 3, 4].map((i) => (
-            <div
-              key={i}
-              style={{
-                height: 18,
-                borderRadius: 4,
-                background: 'linear-gradient(110deg, rgba(196,30,42,0.03) 30%, rgba(196,30,42,0.06) 50%, rgba(196,30,42,0.03) 70%)',
-                backgroundSize: '200% 100%',
-                marginBottom: 8,
-                animation: 'hudShimmer 1.8s ease-in-out infinite',
-                animationDelay: `${i * 0.15}s`,
-              }}
-            />
-          ))}
+          {flipped && analyzing && !analysis ? (
+            /* Analyzing skeleton */
+            <div style={{ padding: '12px 10px', display: 'flex', flexDirection: 'column', gap: 6, height: '100%' }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingBottom: 5,
+                borderBottom: '1px solid rgba(196,30,42,0.15)',
+              }}>
+                <span style={{
+                  fontSize: 8,
+                  fontFamily: "'DM Mono', monospace",
+                  fontWeight: 700,
+                  letterSpacing: '0.1em',
+                  color: 'rgba(196,30,42,0.9)',
+                  animation: 'hudPulse 1.5s ease-in-out infinite',
+                }}>
+                  ANALYZING...
+                </span>
+              </div>
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} style={{
+                  height: 14,
+                  borderRadius: 3,
+                  background: 'linear-gradient(110deg, rgba(196,30,42,0.03) 30%, rgba(196,30,42,0.06) 50%, rgba(196,30,42,0.03) 70%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'hudShimmer 1.8s ease-in-out infinite',
+                  animationDelay: `${i * 0.15}s`,
+                }} />
+              ))}
+              {[1, 2].map((i) => (
+                <div key={`badge-${i}`} style={{
+                  height: 10,
+                  borderRadius: 4,
+                  width: `${40 + i * 15}%`,
+                  background: 'linear-gradient(110deg, rgba(255,255,255,0.02) 30%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.02) 70%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'hudShimmer 1.8s ease-in-out infinite',
+                  animationDelay: `${(4 + i) * 0.15}s`,
+                }} />
+              ))}
+            </div>
+          ) : flipped && analysis ? (
+            <CardBackAnalysis analysis={analysis} onBack={() => setFlipped(false)} />
+          ) : null}
         </div>
-      )}
+      </div>
     </div>
   )
 }
@@ -682,7 +773,7 @@ export function MarketplaceSearch({ partName, partSlug, generation }: Marketplac
     setError(null)
 
     try {
-      const data = await searchParts(searchQuery, generation, partSlug, 8)
+      const data = await searchParts(searchQuery, generation, partSlug, 10)
       if (id !== requestIdRef.current) return
       setResults(data)
       setHasSearched(true)
@@ -728,30 +819,26 @@ export function MarketplaceSearch({ partName, partSlug, generation }: Marketplac
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-        <div
-          style={{
-            width: 6,
-            height: 6,
-            borderRadius: '50%',
-            background: loading ? 'rgba(245,197,24,0.9)' : 'rgba(34,197,94,0.7)',
-            boxShadow: loading
-              ? '0 0 10px rgba(245,197,24,0.5), 0 0 3px rgba(245,197,24,0.3)'
-              : '0 0 10px rgba(34,197,94,0.3)',
-            animation: loading ? 'hudPulse 1.5s ease-in-out infinite' : undefined,
-            transition: 'all 0.3s ease',
-          }}
-        />
-        <h4
-          style={{
-            margin: 0,
-            fontSize: 11,
-            fontWeight: 700,
-            color: 'rgba(255,255,255,0.85)',
-            fontFamily: "'DM Mono', monospace",
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-          }}
-        >
+        <div style={{
+          width: 6,
+          height: 6,
+          borderRadius: '50%',
+          background: loading ? 'rgba(245,197,24,0.9)' : 'rgba(34,197,94,0.7)',
+          boxShadow: loading
+            ? '0 0 10px rgba(245,197,24,0.5), 0 0 3px rgba(245,197,24,0.3)'
+            : '0 0 10px rgba(34,197,94,0.3)',
+          animation: loading ? 'hudPulse 1.5s ease-in-out infinite' : undefined,
+          transition: 'all 0.3s ease',
+        }} />
+        <h4 style={{
+          margin: 0,
+          fontSize: 11,
+          fontWeight: 700,
+          color: 'rgba(255,255,255,0.85)',
+          fontFamily: "'DM Mono', monospace",
+          letterSpacing: '0.12em',
+          textTransform: 'uppercase',
+        }}>
           FIND UPGRADES
         </h4>
         {hasSearched && !loading && (
@@ -777,14 +864,12 @@ export function MarketplaceSearch({ partName, partSlug, generation }: Marketplac
               }
               return null
             })()}
-            <span
-              style={{
-                fontSize: 9,
-                fontFamily: "'DM Mono', monospace",
-                color: 'rgba(255,255,255,0.25)',
-                letterSpacing: '0.04em',
-              }}
-            >
+            <span style={{
+              fontSize: 9,
+              fontFamily: "'DM Mono', monospace",
+              color: 'rgba(255,255,255,0.25)',
+              letterSpacing: '0.04em',
+            }}>
               {results.length} result{results.length !== 1 ? 's' : ''}
             </span>
           </div>
@@ -792,20 +877,18 @@ export function MarketplaceSearch({ partName, partSlug, generation }: Marketplac
       </div>
 
       {/* Search bar */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 10,
-          padding: '8px 14px',
-          borderRadius: 10,
-          background: searchFocused ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.03)',
-          border: `1px solid ${searchFocused ? 'rgba(196,30,42,0.4)' : 'rgba(255,255,255,0.08)'}`,
-          marginBottom: 14,
-          transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
-          boxShadow: searchFocused ? '0 0 16px rgba(196,30,42,0.08), inset 0 1px 0 rgba(255,255,255,0.03)' : 'none',
-        }}
-      >
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        padding: '8px 14px',
+        borderRadius: 10,
+        background: searchFocused ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.03)',
+        border: `1px solid ${searchFocused ? 'rgba(196,30,42,0.4)' : 'rgba(255,255,255,0.08)'}`,
+        marginBottom: 14,
+        transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
+        boxShadow: searchFocused ? '0 0 16px rgba(196,30,42,0.08), inset 0 1px 0 rgba(255,255,255,0.03)' : 'none',
+      }}>
         <button
           onClick={() => doSearch(query)}
           style={{
@@ -843,18 +926,16 @@ export function MarketplaceSearch({ partName, partSlug, generation }: Marketplac
         />
       </div>
 
-      {/* Results area */}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 8,
-        }}
-      >
+      {/* Results grid */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: 8,
+      }}>
         {/* Shimmer loading */}
         {loading && (
           <>
-            {[0, 1, 2].map((i) => (
+            {Array.from({ length: 10 }).map((_, i) => (
               <ShimmerCard key={i} index={i} />
             ))}
           </>
@@ -862,20 +943,19 @@ export function MarketplaceSearch({ partName, partSlug, generation }: Marketplac
 
         {error && !loading && (
           <div style={{
+            gridColumn: '1 / -1',
             textAlign: 'center',
             padding: '24px 0',
             borderRadius: 10,
             background: 'rgba(239,68,68,0.03)',
             border: '1px solid rgba(239,68,68,0.1)',
           }}>
-            <p
-              style={{
-                margin: 0,
-                fontSize: 11,
-                fontFamily: "'DM Mono', monospace",
-                color: 'rgba(239,68,68,0.7)',
-              }}
-            >
+            <p style={{
+              margin: 0,
+              fontSize: 11,
+              fontFamily: "'DM Mono', monospace",
+              color: 'rgba(239,68,68,0.7)',
+            }}>
               {error}.{' '}
               <span
                 onClick={() => doSearch(query)}
@@ -889,27 +969,20 @@ export function MarketplaceSearch({ partName, partSlug, generation }: Marketplac
 
         {!loading && !error && hasSearched && results.length === 0 && (
           <div style={{
+            gridColumn: '1 / -1',
             textAlign: 'center',
             padding: '28px 0',
             borderRadius: 10,
             background: 'rgba(255,255,255,0.015)',
           }}>
-            <div style={{
-              fontSize: 24,
-              marginBottom: 8,
-              opacity: 0.3,
+            <div style={{ fontSize: 24, marginBottom: 8, opacity: 0.3 }}>&#128270;</div>
+            <p style={{
+              margin: 0,
+              fontSize: 11,
+              fontFamily: "'DM Mono', monospace",
+              color: 'rgba(255,255,255,0.3)',
+              lineHeight: 1.6,
             }}>
-              &#128270;
-            </div>
-            <p
-              style={{
-                margin: 0,
-                fontSize: 11,
-                fontFamily: "'DM Mono', monospace",
-                color: 'rgba(255,255,255,0.3)',
-                lineHeight: 1.6,
-              }}
-            >
               No aftermarket parts found.
               <br />
               Try a different search term.
@@ -950,6 +1023,11 @@ export function MarketplaceSearch({ partName, partSlug, generation }: Marketplac
         @keyframes hudPulse {
           0%, 100% { opacity: 0.5; }
           50% { opacity: 1; }
+        }
+        @keyframes hudCardFlipGlow {
+          0% { box-shadow: 0 0 0 rgba(196,30,42,0); }
+          50% { box-shadow: 0 0 20px rgba(196,30,42,0.3), 0 0 40px rgba(196,30,42,0.1); }
+          100% { box-shadow: 0 0 0 rgba(196,30,42,0); }
         }
         @keyframes spin {
           to { transform: rotate(360deg); }
