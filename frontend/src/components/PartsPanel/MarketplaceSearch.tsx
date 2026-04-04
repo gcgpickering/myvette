@@ -899,39 +899,37 @@ export function MarketplaceSearch({ partName, partSlug, generation }: Marketplac
         }}>
           FIND UPGRADES
         </h4>
-        {hasSearched && !loading && (
-          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
-            {(() => {
-              const sources = new Set(results.map(r => r.source).filter(Boolean))
-              if (sources.size > 1) {
-                return (
-                  <span style={{
-                    fontSize: 8,
-                    fontFamily: "'DM Mono', monospace",
-                    color: 'rgba(196,30,42,0.7)',
-                    letterSpacing: '0.06em',
-                    fontWeight: 700,
-                    padding: '2px 6px',
-                    borderRadius: 4,
-                    background: 'rgba(196,30,42,0.06)',
-                    border: '1px solid rgba(196,30,42,0.15)',
-                  }}>
-                    {sources.size} RETAILERS
-                  </span>
-                )
-              }
-              return null
-            })()}
-            <span style={{
-              fontSize: 9,
-              fontFamily: "'DM Mono', monospace",
-              color: 'rgba(255,255,255,0.25)',
-              letterSpacing: '0.04em',
-            }}>
-              {results.length} result{results.length !== 1 ? 's' : ''}
-            </span>
-          </div>
-        )}
+        {hasSearched && !loading && (() => {
+          const displayResults = results.filter((r) => r.imageUrl && r.price != null)
+          const sources = new Set(displayResults.map(r => r.source).filter(Boolean))
+          return (
+            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+              {sources.size > 1 && (
+                <span style={{
+                  fontSize: 8,
+                  fontFamily: "'DM Mono', monospace",
+                  color: 'rgba(196,30,42,0.7)',
+                  letterSpacing: '0.06em',
+                  fontWeight: 700,
+                  padding: '2px 6px',
+                  borderRadius: 4,
+                  background: 'rgba(196,30,42,0.06)',
+                  border: '1px solid rgba(196,30,42,0.15)',
+                }}>
+                  {sources.size} RETAILERS
+                </span>
+              )}
+              <span style={{
+                fontSize: 9,
+                fontFamily: "'DM Mono', monospace",
+                color: 'rgba(255,255,255,0.25)',
+                letterSpacing: '0.04em',
+              }}>
+                {displayResults.length} result{displayResults.length !== 1 ? 's' : ''}
+              </span>
+            </div>
+          )
+        })()}
       </div>
 
       {/* Search bar */}
@@ -1049,15 +1047,17 @@ export function MarketplaceSearch({ partName, partSlug, generation }: Marketplac
         )}
 
         {!loading &&
-          results.map((r, i) => (
-            <ProductCard
-              key={`${r.url}-${i}`}
-              result={r}
-              index={i}
-              generation={generation}
-              partSlug={partSlug}
-            />
-          ))}
+          results
+            .filter((r) => r.imageUrl && r.price != null)
+            .map((r, i) => (
+              <ProductCard
+                key={`${r.url}-${i}`}
+                result={r}
+                index={i}
+                generation={generation}
+                partSlug={partSlug}
+              />
+            ))}
       </div>
 
       {/* Animations */}

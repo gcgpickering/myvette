@@ -30,6 +30,47 @@ def _extract_price(text: str) -> float | None:
     return None
 
 
+def _extract_image(item: dict, metadata: dict) -> str | None:
+    """Extract image URL from a dict-based Firecrawl result."""
+    return (
+        item.get("image_url")
+        or item.get("image")
+        or item.get("thumbnail")
+        or metadata.get("og:image")
+        or metadata.get("ogImage")
+        or metadata.get("og_image")
+        or metadata.get("image")
+        or None
+    )
+
+
+def _extract_image_from_obj(item: object, metadata: dict | object) -> str | None:
+    """Extract image URL from an SDK object-based Firecrawl result."""
+    img = (
+        getattr(item, "image_url", None)
+        or getattr(item, "image", None)
+        or getattr(item, "thumbnail", None)
+    )
+    if img:
+        return img
+    # Try metadata dict keys
+    if isinstance(metadata, dict):
+        return (
+            metadata.get("og:image")
+            or metadata.get("ogImage")
+            or metadata.get("og_image")
+            or metadata.get("image")
+            or None
+        )
+    # SDK metadata object with attributes
+    return (
+        getattr(metadata, "og_image", None)
+        or getattr(metadata, "ogImage", None)
+        or getattr(metadata, "image", None)
+        or None
+    )
+
+
 # Key Corvette aftermarket retailers for competitive pricing
 CORVETTE_RETAILERS = [
     {"name": "Summit Racing", "domain": "summitracing.com"},
@@ -87,9 +128,16 @@ class FirecrawlService:
 
         all_results: list[dict[str, Any]] = []
 
+        # Over-fetch so we have enough after filtering to image+price only
+        fetch_limit = max(limit * 3, 30)
+
         try:
-            logger.info("Firecrawl competitive search: %s (limit=%d)", scoped_query, limit)
-            raw = self.app.search(scoped_query, limit=limit)
+            logger.info("Firecrawl competitive search: %s (limit=%d)", scoped_query, fetch_limit)
+            raw = self.app.search(
+                scoped_query,
+                limit=fetch_limit,
+                scrape_options={"formats": ["markdown"]},
+            )
             all_results.extend(self._parse_results(raw))
         except Exception:
             logger.exception("Firecrawl competitive search failed: %s", scoped_query)
@@ -102,9 +150,14 @@ class FirecrawlService:
                 seen_urls.add(r["url"])
                 deduped.append(r)
 
-        # Sort: items with prices first, then by price ascending
-        deduped.sort(key=lambda x: (x["price"] is None, x["price"] or 0))
-        return deduped
+        # Only keep results that have both an image and a price
+        with_image_and_price = [
+            r for r in deduped if r.get("image_url") and r.get("price") is not None
+        ]
+
+        # Sort by price ascending
+        with_image_and_price.sort(key=lambda x: x["price"] or 0)
+        return with_image_and_price[:limit]
 
     async def search_parts(
         self,
@@ -139,11 +192,25 @@ class FirecrawlService:
         parts.append("buy price upgrade")
         search_query = " ".join(parts)
 
-        try:
-            logger.info("Firecrawl search: %s (limit=%d)", search_query, limit)
-            result = self.app.search(search_query, limit=limit)
+        # Over-fetch so we have enough after filtering to image+price only
+        fetch_limit = max(limit * 3, 30)
 
-            return self._parse_results(result)
+        try:
+            logger.info("Firecrawl search: %s (limit=%d)", search_query, fetch_limit)
+            result = self.app.search(
+                search_query,
+                limit=fetch_limit,
+                scrape_options={"formats": ["markdown"]},
+            )
+
+            parsed = self._parse_results(result)
+
+            # Only keep results that have both an image and a price
+            with_image_and_price = [
+                r for r in parsed if r.get("image_url") and r.get("price") is not None
+            ]
+            with_image_and_price.sort(key=lambda x: x["price"] or 0)
+            return with_image_and_price[:limit]
         except Exception:
             logger.exception("Firecrawl search failed for query: %s", search_query)
             return []
@@ -176,13 +243,7 @@ class FirecrawlService:
                     "url": url,
                     "source": _extract_domain(url),
                     "description": desc,
-                    "image_url": (
-                        item.get("image_url")
-                        or item.get("image")
-                        or metadata.get("og:image")
-                        or metadata.get("ogImage")
-                        or None
-                    ),
+                    "image_url": _extract_image(item, metadata),
                 }
             elif hasattr(item, "url"):
                 # SDK object with attributes
@@ -196,13 +257,7 @@ class FirecrawlService:
                     "url": url,
                     "source": _extract_domain(url),
                     "description": desc,
-                    "image_url": (
-                        getattr(item, "image_url", None)
-                        or getattr(item, "image", None)
-                        or (metadata.get("og:image") if isinstance(metadata, dict) else None)
-                        or (metadata.get("ogImage") if isinstance(metadata, dict) else None)
-                        or None
-                    ),
+                    "image_url": _extract_image_from_obj(item, metadata),
                 }
             else:
                 continue
