@@ -160,11 +160,20 @@ class FirecrawlService:
         all_results: list[dict[str, Any]] = []
 
         try:
-            logger.info("Firecrawl competitive search: %s (limit=%d)", scoped_query, limit)
-            raw = self.app.search(scoped_query, limit=limit)
+            logger.info("Firecrawl competitive search (with scrape): %s (limit=%d)", scoped_query, limit)
+            raw = self.app.search(
+                scoped_query,
+                limit=limit,
+                scrape_options={"formats": ["markdown"]},
+            )
             all_results.extend(self._parse_results(raw))
         except Exception:
-            logger.exception("Firecrawl competitive search failed: %s", scoped_query)
+            logger.warning("Firecrawl scrape-search failed, retrying without scrape_options")
+            try:
+                raw = self.app.search(scoped_query, limit=limit)
+                all_results.extend(self._parse_results(raw))
+            except Exception:
+                logger.exception("Firecrawl competitive search failed: %s", scoped_query)
 
         # Deduplicate by URL
         seen_urls: set[str] = set()
@@ -212,13 +221,21 @@ class FirecrawlService:
         search_query = " ".join(parts)
 
         try:
-            logger.info("Firecrawl search: %s (limit=%d)", search_query, limit)
-            result = self.app.search(search_query, limit=limit)
-
+            logger.info("Firecrawl search (with scrape): %s (limit=%d)", search_query, limit)
+            result = self.app.search(
+                search_query,
+                limit=limit,
+                scrape_options={"formats": ["markdown"]},
+            )
             return self._parse_results(result)
         except Exception:
-            logger.exception("Firecrawl search failed for query: %s", search_query)
-            return []
+            logger.warning("Firecrawl scrape-search failed, retrying without scrape_options")
+            try:
+                result = self.app.search(search_query, limit=limit)
+                return self._parse_results(result)
+            except Exception:
+                logger.exception("Firecrawl search failed for query: %s", search_query)
+                return []
 
     @staticmethod
     def _parse_results(raw: Any) -> list[dict[str, Any]]:
