@@ -159,16 +159,9 @@ class FirecrawlService:
 
         all_results: list[dict[str, Any]] = []
 
-        # Over-fetch so we have enough after filtering to image+price only
-        fetch_limit = max(limit * 3, 30)
-
         try:
-            logger.info("Firecrawl competitive search: %s (limit=%d)", scoped_query, fetch_limit)
-            raw = self.app.search(
-                scoped_query,
-                limit=fetch_limit,
-                scrape_options={"formats": ["markdown"]},
-            )
+            logger.info("Firecrawl competitive search: %s (limit=%d)", scoped_query, limit)
+            raw = self.app.search(scoped_query, limit=limit)
             all_results.extend(self._parse_results(raw))
         except Exception:
             logger.exception("Firecrawl competitive search failed: %s", scoped_query)
@@ -181,13 +174,9 @@ class FirecrawlService:
                 seen_urls.add(r["url"])
                 deduped.append(r)
 
-        # Require price; prefer results with images (sort them first)
-        with_price = [r for r in deduped if r.get("price") is not None]
-        with_price.sort(key=lambda x: (
-            0 if x.get("image_url") else 1,  # images first
-            x["price"] or 0,
-        ))
-        return with_price[:limit]
+        # Sort: items with prices first, then by price ascending
+        deduped.sort(key=lambda x: (x["price"] is None, x["price"] or 0))
+        return deduped
 
     async def search_parts(
         self,
@@ -222,26 +211,11 @@ class FirecrawlService:
         parts.append("buy price upgrade")
         search_query = " ".join(parts)
 
-        # Over-fetch so we have enough after filtering to image+price only
-        fetch_limit = max(limit * 3, 30)
-
         try:
-            logger.info("Firecrawl search: %s (limit=%d)", search_query, fetch_limit)
-            result = self.app.search(
-                search_query,
-                limit=fetch_limit,
-                scrape_options={"formats": ["markdown"]},
-            )
+            logger.info("Firecrawl search: %s (limit=%d)", search_query, limit)
+            result = self.app.search(search_query, limit=limit)
 
-            parsed = self._parse_results(result)
-
-            # Require price; prefer results with images (sort them first)
-            with_price = [r for r in parsed if r.get("price") is not None]
-            with_price.sort(key=lambda x: (
-                0 if x.get("image_url") else 1,  # images first
-                x["price"] or 0,
-            ))
-            return with_price[:limit]
+            return self._parse_results(result)
         except Exception:
             logger.exception("Firecrawl search failed for query: %s", search_query)
             return []
