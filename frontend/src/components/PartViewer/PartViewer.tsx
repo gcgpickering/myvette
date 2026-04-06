@@ -6,6 +6,7 @@ import { getMeshMap, type MeshZone, type GenerationMeshMap } from '../../data/co
 import type { GenerationCode } from '../../data/corvette-generations'
 import type { PartSlug } from '../../types'
 import { partDiagrams } from '../../data/diagrams'
+import { getInteractiveSVG } from './svgs'
 
 /* ─── PartSlug to MeshZone mapping ─── */
 
@@ -429,9 +430,11 @@ interface PartViewerProps {
   modelUrl: string
   generation: string
   partZone: PartSlug
+  onSubComponentSelect?: (subComponentId: string) => void
+  selectedSubId?: string | null
 }
 
-export function PartViewer({ modelUrl, generation, partZone }: PartViewerProps) {
+export function PartViewer({ modelUrl, generation, partZone, onSubComponentSelect, selectedSubId }: PartViewerProps) {
   const meshMap = useMemo(
     () => getMeshMap(generation as GenerationCode),
     [generation],
@@ -464,14 +467,28 @@ export function PartViewer({ modelUrl, generation, partZone }: PartViewerProps) 
   // 3. Extraction found 0 meshes despite zone existing in map
   const showDiagramFallback = isEmpty || !hasZoneMeshes || meshCount === 0
 
-  if (showDiagramFallback && meshCount !== null) {
-    // Extraction ran and found nothing — show diagram
+  // Try interactive SVG first, fall back to old diagram
+  const InteractivePart = getInteractiveSVG(partZone)
+  const renderFallback = () => {
+    if (InteractivePart) {
+      return (
+        <div style={{ width: '100%', height: '100%' }}>
+          <InteractivePart
+            onSubComponentSelect={onSubComponentSelect}
+            selectedSubId={selectedSubId}
+          />
+        </div>
+      )
+    }
     return <DiagramFallback label={label} partSlug={partZone} />
   }
 
+  if (showDiagramFallback && meshCount !== null) {
+    return renderFallback()
+  }
+
   if (isEmpty || !hasZoneMeshes) {
-    // No mesh map or zone — show diagram immediately (no need to attempt extraction)
-    return <DiagramFallback label={label} partSlug={partZone} />
+    return renderFallback()
   }
 
   return (

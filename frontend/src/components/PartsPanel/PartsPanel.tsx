@@ -16,6 +16,8 @@ interface PartTab {
 interface PartsPanelProps {
   generation: string
   onTabChange?: (slug: PartSlug) => void
+  onSubComponentSelect?: (subComponentId: string) => void
+  externalSelectedSubId?: string | null
 }
 
 /* ─── Constants ─── */
@@ -210,7 +212,12 @@ function RPGStatBar({
 
 /* ─── Part Detail View ─── */
 
-function PartDetail({ part, generation }: { part: PartImpact; generation: string }) {
+function PartDetail({ part, generation, onSubComponentSelect, externalSelectedSubId }: {
+  part: PartImpact
+  generation: string
+  onSubComponentSelect?: (subComponentId: string) => void
+  externalSelectedSubId?: string | null
+}) {
   const gen = getGeneration(generation)
   const stockHP = gen ? parseNumber(gen.specs.horsepower) : 400
   const stockZeroToSixty = gen ? parseNumber(gen.specs.zeroToSixty) : 4.0
@@ -228,6 +235,16 @@ function PartDetail({ part, generation }: { part: PartImpact; generation: string
     const first = subGroups[0]?.subComponents[0] ?? null
     setSelectedSub(first)
   }, [subGroups])
+
+  // Sync from external selection (e.g. clicking on 3D part region)
+  useEffect(() => {
+    if (!externalSelectedSubId) return
+    const allSubs = subGroups.flatMap(g => g.subComponents)
+    const match = allSubs.find(s => s.id === externalSelectedSubId)
+    if (match && match.id !== selectedSub?.id) {
+      setSelectedSub(match)
+    }
+  }, [externalSelectedSubId, subGroups])
 
   // Build search query from selected sub-component keywords
   const searchQuery = selectedSub
@@ -407,7 +424,7 @@ function PartDetail({ part, generation }: { part: PartImpact; generation: string
                     return (
                       <button
                         key={sub.id}
-                        onClick={() => setSelectedSub(sub)}
+                        onClick={() => { setSelectedSub(sub); onSubComponentSelect?.(sub.id) }}
                         title={sub.notes || sub.keywords.slice(0, 3).join(', ')}
                         style={{
                           padding: '3px 8px',
@@ -453,7 +470,7 @@ function PartDetail({ part, generation }: { part: PartImpact; generation: string
 
 /* ─── Main Component ─── */
 
-export function PartsPanel({ generation, onTabChange }: PartsPanelProps) {
+export function PartsPanel({ generation, onTabChange, onSubComponentSelect, externalSelectedSubId }: PartsPanelProps) {
   const [activeTab, setActiveTab] = useState<PartSlug>('engine')
   const [hoveredTab, setHoveredTab] = useState<PartSlug | null>(null)
 
@@ -629,7 +646,7 @@ export function PartsPanel({ generation, onTabChange }: PartsPanelProps) {
 
       {/* ── Part Detail ── */}
       <div style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
-        {activePart && <PartDetail part={activePart} generation={generation} />}
+        {activePart && <PartDetail part={activePart} generation={generation} onSubComponentSelect={onSubComponentSelect} externalSelectedSubId={externalSelectedSubId} />}
       </div>
     </div>
   )

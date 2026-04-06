@@ -311,6 +311,7 @@ function GenerationPage() {
   const [modelLoaded, setModelLoaded] = useState(false)
   const [infoPanelOpen, setInfoPanelOpen] = useState(false)
   const [selectedPartTab, setSelectedPartTab] = useState<PartSlug | null>(null)
+  const [selectedSubId, setSelectedSubId] = useState<string | null>(null)
 
   const API_BASE = (import.meta.env.VITE_API_URL || '/api').replace(/\/api$/, '')
 
@@ -463,6 +464,8 @@ function GenerationPage() {
               modelUrl={modelUrl}
               generation={gen!}
               partZone={selectedPartTab}
+              onSubComponentSelect={setSelectedSubId}
+              selectedSubId={selectedSubId}
             />
           </div>
         )}
@@ -471,7 +474,7 @@ function GenerationPage() {
       {/* Lower section: Parts tab panel */}
       {modelLoaded && gen && (
         <div className="border-t border-border-subtle overflow-hidden" style={{ height: '45%' }}>
-          <PartsPanel generation={gen} onTabChange={setSelectedPartTab} />
+          <PartsPanel generation={gen} onTabChange={setSelectedPartTab} onSubComponentSelect={setSelectedSubId} externalSelectedSubId={selectedSubId} />
         </div>
       )}
     </div>
