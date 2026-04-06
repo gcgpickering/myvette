@@ -133,7 +133,7 @@ class FirecrawlService:
 
         The Python SDK v4.21 silently drops scrape_options, so we bypass it.
         """
-        async with httpx.AsyncClient(timeout=60.0) as client:
+        async with httpx.AsyncClient(timeout=30.0) as client:
             resp = await client.post(
                 "https://api.firecrawl.dev/v1/search",
                 headers={
@@ -142,8 +142,9 @@ class FirecrawlService:
                 },
                 json={
                     "query": query,
-                    "limit": limit,
-                    "scrapeOptions": {"formats": ["markdown"]},
+                    "limit": min(limit, 10),
+                    "scrapeOptions": {"formats": ["markdown"], "onlyMainContent": True},
+                    "timeout": 20000,
                 },
             )
             resp.raise_for_status()

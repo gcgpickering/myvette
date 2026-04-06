@@ -483,65 +483,146 @@ export function PartsPanel({ generation, onTabChange }: PartsPanelProps) {
         overflow: 'hidden',
       }}
     >
-      {/* ── Tab Bar ── */}
+      {/* ── Glass Tab Bar ── */}
       <div
         style={{
-          display: 'flex',
-          overflowX: 'auto',
-          gap: 2,
-          padding: '8px 0 0',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
+          position: 'relative',
+          padding: '10px 4px 8px',
         }}
-        className="hide-scrollbar"
       >
-        {PART_TABS.map((tab) => {
-          const isActive = tab.slug === activeTab
-          const isHovered = tab.slug === hoveredTab
+        {/* Glass rail background */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.025) 0%, rgba(0,0,0,0.15) 100%)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            borderRadius: 14,
+            border: '1px solid rgba(255,255,255,0.06)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -1px 0 rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.4)',
+          }}
+        />
+        {/* Top light edge */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: '8%',
+            right: '8%',
+            height: 1,
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+            borderRadius: 1,
+            zIndex: 1,
+          }}
+        />
+        <div
+          style={{
+            position: 'relative',
+            display: 'flex',
+            overflowX: 'auto',
+            gap: 3,
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            zIndex: 2,
+          }}
+          className="hide-scrollbar"
+        >
+          {PART_TABS.map((tab) => {
+            const isActive = tab.slug === activeTab
+            const isHovered = tab.slug === hoveredTab
 
-          return (
-            <button
-              key={tab.slug}
-              onClick={() => handleTabChange(tab.slug)}
-              onMouseEnter={() => setHoveredTab(tab.slug)}
-              onMouseLeave={() => setHoveredTab(null)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '8px 14px',
-                border: 'none',
-                borderBottom: isActive
-                  ? '2px solid rgba(196,30,42,0.9)'
-                  : '2px solid transparent',
-                background: isActive
-                  ? 'rgba(196,30,42,0.08)'
-                  : isHovered
-                    ? 'rgba(255,255,255,0.04)'
-                    : 'transparent',
-                color: isActive ? '#fff' : 'rgba(255,255,255,0.5)',
-                cursor: 'pointer',
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 12,
-                fontWeight: isActive ? 600 : 400,
-                whiteSpace: 'nowrap',
-                borderRadius: '6px 6px 0 0',
-                transition: 'all 0.2s ease',
-                flexShrink: 0,
-              }}
-            >
-              <span style={{ fontSize: 14 }}>{tab.icon}</span>
-              {tab.label}
-            </button>
-          )
-        })}
+            return (
+              <button
+                key={tab.slug}
+                onClick={() => handleTabChange(tab.slug)}
+                onMouseEnter={() => setHoveredTab(tab.slug)}
+                onMouseLeave={() => setHoveredTab(null)}
+                style={{
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 5,
+                  padding: '7px 12px',
+                  border: isActive
+                    ? '1px solid rgba(196,30,42,0.35)'
+                    : isHovered
+                      ? '1px solid rgba(255,255,255,0.1)'
+                      : '1px solid transparent',
+                  background: isActive
+                    ? 'linear-gradient(180deg, rgba(196,30,42,0.12) 0%, rgba(196,30,42,0.04) 100%)'
+                    : isHovered
+                      ? 'linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)'
+                      : 'transparent',
+                  color: isActive
+                    ? 'rgba(255,255,255,0.95)'
+                    : isHovered
+                      ? 'rgba(255,255,255,0.7)'
+                      : 'rgba(255,255,255,0.4)',
+                  cursor: 'pointer',
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: 11,
+                  fontWeight: isActive ? 600 : 400,
+                  whiteSpace: 'nowrap',
+                  borderRadius: 10,
+                  transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
+                  flexShrink: 0,
+                  backdropFilter: isActive ? 'blur(12px)' : 'none',
+                  WebkitBackdropFilter: isActive ? 'blur(12px)' : 'none',
+                  boxShadow: isActive
+                    ? 'inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.15), 0 2px 8px rgba(196,30,42,0.1), 0 0 0 0.5px rgba(196,30,42,0.2)'
+                    : isHovered
+                      ? 'inset 0 1px 0 rgba(255,255,255,0.04), 0 1px 4px rgba(0,0,0,0.2)'
+                      : 'none',
+                  letterSpacing: '0.02em',
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Active tab inner glow */}
+                {isActive && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'radial-gradient(ellipse at 50% 0%, rgba(196,30,42,0.15) 0%, transparent 70%)',
+                      pointerEvents: 'none',
+                      borderRadius: 10,
+                    }}
+                  />
+                )}
+                {/* Active tab bottom accent */}
+                {isActive && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: '20%',
+                      right: '20%',
+                      height: 1,
+                      background: 'linear-gradient(90deg, transparent, rgba(196,30,42,0.6), transparent)',
+                      borderRadius: 1,
+                    }}
+                  />
+                )}
+                <span style={{
+                  fontSize: 13,
+                  position: 'relative',
+                  filter: isActive ? 'none' : 'grayscale(0.5)',
+                  opacity: isActive ? 1 : 0.6,
+                  transition: 'all 0.25s ease',
+                }}>{tab.icon}</span>
+                <span style={{ position: 'relative' }}>{tab.label}</span>
+              </button>
+            )
+          })}
+        </div>
       </div>
 
-      {/* ── Divider ── */}
+      {/* ── Divider (subtle, glass-matched) ── */}
       <div
         style={{
           height: 1,
-          background: 'rgba(255,255,255,0.06)',
+          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent)',
           marginBottom: 4,
         }}
       />
